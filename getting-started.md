@@ -548,6 +548,11 @@ changes in the `ref`, and update the dom whenever `ref.value` is updated later.
 > only", those are callback functions to react on events. And a small set are "two-way bindings", which can be bound 
 > to a `ref`, where the value of the `ref` and the state of the DOM are always kept in sync, whichever changes first.
 
+
+> TODO: add `components: [TodoItem],` in parent page
+> 
+> 
+
 If you look at your page again, you should now be able to click the checkbox left of the todo, and see it being 
 checked off.
 

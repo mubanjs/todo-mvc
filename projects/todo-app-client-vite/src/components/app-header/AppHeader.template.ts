@@ -5,7 +5,7 @@ export type AppHeaderTemplateProps = {
 };
 
 export function appHeaderTemplate({ title = 'Todos' }: AppHeaderTemplateProps = {}) {
-  return html`<div data-component="header" class="header">
+  return html`<div data-component="app-header" class="header">
       <h1>${title}</h1>
       <input data-ref="newTodoInput" class="new-todo" placeholder="What needs to be done?" autofocus />
     </div>`;
