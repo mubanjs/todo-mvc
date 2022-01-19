@@ -778,3 +778,9 @@ connected it to the parent. This is what's next.
 
 ### `App` - connecting our child components
 
+```js
+[
+  { title: 'Taste JavaScript', isCompleted: true },
+  { title: 'Buy a unicorn', isCompleted: false }
+]
+```
