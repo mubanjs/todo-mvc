@@ -732,7 +732,7 @@ export const AppHeader = defineComponent({
     newTodoInput: 'newTodoInput',
   },
   props: {
-    onCreate: propType.func.shape<(value: string) => void>()
+    onCreate: propType.func.optional.shape<(value: string) => void>()
   },
   setup({ refs, props }) {
     const inputValue = ref('');
@@ -778,9 +778,195 @@ connected it to the parent. This is what's next.
 
 ### `App` - connecting our child components
 
+#### Control the list of todos in the App
+
+Before we start adding new todos, let's move the control of rendering our individual Todo items to our `App` component.
+
+First, we create a ref to store our todo data in:
+```ts
+const todos = ref([]);
+```
+
+Next, we need to fill it with data. Since we already could have todos rendered on the server, we probably want to 
+extract these items from the page. Since we already have our `TodoItem` components mounted, and their `props` 
+extract the required info from the HTML, we can try to retrieve that information.
+
+```ts
+refs: {
+  todoItems: refComponents(TodoItem),
+},
+```
+
+Here we define a new `ref` in our `App` component. We're using `refComponents` to get a collection of components. We 
+pass `TodoItem` as a Component there, since we are interested in those. This will look for 
+`data-component="todo-item"` elements in the DOM, and initialized the `TodoItem` component. The instances of those 
+components will be available in the setup function as `refs.todoItems`.
+
+Now that we have configured `TodoItem` as a `ref`, we can remove it from the `components: []` Array.
+
+In our setup function we can now access these refs to get access to the data;
+```ts
+setup({ refs }) {
+  const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
+  const todos = ref(initialTodoItems);
+  
+  return [];
+}
+```
+
+1. `refs.todoItems.getComponents()` retrieves all `TodoItem` component instances, where we `.map` over them.
+2. `({ props : { title, isCompleted } })` destructures those two props, which is similar to `map(item => item.props.
+   title)`.
+3. For each component, we return the two props we're interested in; `({ title, isCompleted })`.
+
+`initialTodoItems` now contains an array of todo objects, which we use to initialize our `todos` ref.
+
+If we would add `console.log(todos.value)`, we'd see:
 ```js
 [
   { title: 'Taste JavaScript', isCompleted: true },
   { title: 'Buy a unicorn', isCompleted: false }
 ]
 ```
+
+In order to use this extracted data to render our Todo items (and later add or remove them), we use `bindTemplate`;
+
+```ts
+refs: {
+  todoList: 'todoList',
+  todoItems: refComponents(TodoItem),
+}
+
+// ...
+
+return [
+   bindTemplate(
+     refs.todoList,
+     todos,
+     (items ) => items.map(itemData => todoItemTemplate(itemData)),
+   ),
+]
+```
+
+1. First we add a `todoList` ref definition, this is the `<ul>` container for our Todo items.
+2. We pass this ref as our first parameter, since we want to modify the content of this element.
+3. `todos` is passed second, this is the reactive data that `bindTemplate` is watching for changes
+4. Whenever `todos` changes, our 3rd parameter – a template function – is executed. We use it to render our 
+   `todoItemTemplate` with the passed data, and return the mapped result. This will then replace the `innerHTML` of 
+   the `<ul>` container we bind to.
+5. `bindTemplate` will also make sure that whenever the HTML is update, it initializes all new components.
+
+In total, our code should now look like this;
+
+```ts
+import {
+  bind,
+  bindTemplate,
+  defineComponent,
+  ref,
+  refComponents,
+} from '@muban/muban';
+import { AppHeader } from '../app-header/AppHeader';
+import { TodoItem } from '../todo-item/TodoItem';
+import { todoItemTemplate } from '../todo-item/TodoItem.template';
+
+export const App = defineComponent({
+  name: "app",
+  components: [AppHeader],
+  refs: {
+    todoList: 'todoList',
+    todoItems: refComponents(TodoItem),
+  },
+  setup({ refs }) {
+    const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
+    const todos = ref(initialTodoItems);
+
+    return [
+      bindTemplate(
+        refs.todoList,
+        todos,
+        (items ) => items.map(itemData => todoItemTemplate(itemData)),
+      ),
+    ];
+  }
+});
+```
+
+And if you would look in the browser, nothing would have visually changed. However, we're now ready to add new Todos.
+
+#### Add a new Todo
+
+To get access to the new Todo, we need to pass our `onCreate` function to the `AppHeader` component.
+
+We start by adding this as a `refComponent`, so we can bind to it. We can now also remove the `components` array 
+completely.
+
+```ts
+appHeader: refComponents(AppHeader),
+```
+
+Next, we add our binding;
+```ts
+bind(refs.appHeader, {
+  onCreate(newTodo) {
+    todos.value = todos.value.concat({title: newTodo, isCompleted: false});
+  }
+}),
+```
+
+Here we pass the `onCreate` function to our `appHeader` component, so when you submit a new one, this function is 
+called. In the function, we take our `newTodo` and create an object (completed is false when we add it), and add it 
+to our existing array.
+
+Because we use a `ref` – which only "triggers" changes when you set the `.value`, we use the immutable `concat` 
+method to construct a new array with the new item, and assign that to `todos.value`.
+
+With this in place, our `bindTemplate` should automatically render our new Todo item when `onCreate` is called.
+
+Our `App` component now looks like this:
+```ts
+import {
+  bind,
+  bindTemplate,
+  defineComponent,
+  ref,
+  refComponents,
+} from '@muban/muban';
+import { AppHeader } from '../app-header/AppHeader';
+import { TodoItem } from '../todo-item/TodoItem';
+import { todoItemTemplate } from '../todo-item/TodoItem.template';
+
+export const App = defineComponent({
+  name: "app",
+  refs: {
+    todoList: 'todoList',
+    todoItems: refComponents(TodoItem),
+    appHeader: refComponents(AppHeader),
+  },
+  setup({ refs}) {
+    const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
+    const todos = ref(initialTodoItems);
+
+    return [
+      bind(refs.appHeader, {
+        onCreate(newTodo) {
+          todos.value = todos.value.concat({title: newTodo, isCompleted: false});
+        }
+      }),
+      bindTemplate(
+        refs.todoList,
+        todos,
+        (items ) => items.map(itemData => todoItemTemplate(itemData)),
+      ),
+    ];
+  }
+});
+```
+
+And if you look at your browser now, you should be able to add new Todos!
+
+However, if we edit an existing Todo, and we add a new one after that, our earlier edit is reverted.
+This is because those edit changes are stored locally in our component, and our `App` now manages the data of all 
+our Todos when it updates the list.
+
+So our next step is to propagate changes from the `TodoItem` components back to the `App`.
