@@ -1191,3 +1191,10 @@ export const App = defineComponent({
 
 With this in place, if we check our app again, we should be able to edit existing and add new todo items, without 
 anything getting reverted to outdated information.
+
+## Deleting an item
+
+Now that we can Add and Edit items, it's time for Deleting ones as well. For this to work, we need to add click 
+bindings to our delete button, and add a `onDelete` prop we can call. Then our `App` we need to pass the `onDelete`, 
+and remove our Todo from the list.
+

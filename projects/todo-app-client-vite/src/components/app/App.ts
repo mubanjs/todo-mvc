@@ -30,6 +30,9 @@ export const App = defineComponent({
         ...todos.value[refIndex],
         onChange(newProps) {
           todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
+        },
+        onDelete() {
+          todos.value = todos.value.filter((_, index) => index !== refIndex)
         }
       })),
       bindTemplate(

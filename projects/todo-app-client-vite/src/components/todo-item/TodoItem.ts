@@ -12,6 +12,7 @@ export const TodoItem = defineComponent({
     title: propType.string.source({ type: 'text', target: 'title' }),
     isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
     onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
+    onDelete: propType.func.optional.shape<() => void>(),
   },
   setup({ props, refs}) {
     const isEditing = ref(false);
@@ -70,6 +71,11 @@ export const TodoItem = defineComponent({
           blur() {
             exitEditing(true);
           }
+        }
+      }),
+      bind(refs.destroyButton, {
+        click() {
+          props.onDelete?.();
         }
       })
     ];
