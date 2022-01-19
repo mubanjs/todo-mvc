@@ -394,7 +394,7 @@ Now that we have our templates set up, it's time to make things interactive. We 
 changed in later steps, those are to showcase some different methods of doing things, and help you understand the 
 thinking process.
 
-### TodoItem
+### `TodoItem` - Editing our Todo
 
 First, let's make our `TodoItem` interactive, so we can mark it as completed. Down the road we might want to manage 
 this in the parent component, but let's start with just the `TodoItem` in isolation.
@@ -549,9 +549,24 @@ changes in the `ref`, and update the dom whenever `ref.value` is updated later.
 > to a `ref`, where the value of the `ref` and the state of the DOM are always kept in sync, whichever changes first.
 
 
-> TODO: add `components: [TodoItem],` in parent page
-> 
-> 
+**Adding to the parent**
+
+To have our `TodoItem` component initialized based on the HTML, we need to register it to the parent. Until we 
+actually need these components as refs to add bindings to, we can add them in the `components` array, just so they 
+are "known".
+
+```ts
+export const App = defineComponent({
+  name: "app",
+  components: [TodoItem],
+  setup() {
+    console.log('App Running...')
+    return [];
+  }
+});
+```
+
+We added `components: [TodoItem],` here.
 
 If you look at your page again, you should now be able to click the checkbox left of the todo, and see it being 
 checked off.
@@ -688,3 +703,78 @@ Now we can enter and exit the edit state freely, and choose to accept or revert 
 
 In our next step we are going to try to create new Todos, which might require us to change some things in this 
 component as well.
+
+### `AppHeader` - adding new Todos
+
+As with the TodoItem, let's create our component file in `src/components/app-header/AppHeader.ts`.
+
+```ts
+import { defineComponent } from '@muban/muban';
+
+export const AppHeader = defineComponent({
+  name: 'app-header',
+  setup({ refs, props }) {
+    return [];
+  }
+})
+```
+
+And to make sure we don't forget, add it to our `App.ts` component list `components: [TodoItem, AppHeader],`.
+
+With the basic setup there, let's add our refs, props and bindings. 
+
+```ts
+import { bind, defineComponent, propType, ref } from '@muban/muban';
+
+export const AppHeader = defineComponent({
+  name: 'app-header',
+  refs: {
+    newTodoInput: 'newTodoInput',
+  },
+  props: {
+    onCreate: propType.func.shape<(value: string) => void>()
+  },
+  setup({ refs, props }) {
+    const inputValue = ref('');
+    return [
+      bind(refs.newTodoInput, {
+        textInput: inputValue,
+        event: {
+          keyup(event) {
+            if (event.key === 'Enter') {
+              props.onCreate?.(inputValue.value);
+              inputValue.value = '';
+            }
+          }
+        }
+      })
+    ];
+  }
+})
+```
+
+We have our `newTodoInput` ref, that's used to add bindings to.
+
+We configured a `onCreate` prop, that will be passed from the parent component later. `func` types can never be 
+extracted from the HTML, so should always be passed from the parent.
+
+The order in which all components are initialized means that `onCreate` will never be present in the `setup` 
+immediately, but it will be once the component is mounted and bindings are executed.
+
+Also note the generic argument for `shape<(value: string) => void>()`, we use that to tell TypeScript what our 
+function will be like. In this case, the function expects a value to be passed, and won't return anything.
+
+For our `setup`, we start with a `inputValue` ref, where we store the value of our input field using the
+`textInput: inputValue` binding.
+
+And just like in our `TodoItem` bindings, we use the `keyup` to detect when we press `[Enter]`. Once we do, we call 
+our `onCreate` callback (using `?.` optional chaining, since we can't be sure the parent already passed this prop), 
+and pass the value we have stored in `inputValue`. Lastly, we reset our input back to `''`, so we can immediately 
+start entering our next Todo.
+
+If you look at your running application now, you should be able to type in the input field, and hit `[enter]` to 
+empty the input again. Just like with the `TodoItem` this component now only works on isolation, we haven't 
+connected it to the parent. This is what's next.
+
+### `App` - connecting our child components
+
