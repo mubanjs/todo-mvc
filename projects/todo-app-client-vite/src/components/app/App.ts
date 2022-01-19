@@ -1,10 +1,11 @@
 import {
   bind, bindMap,
-  bindTemplate,
+  bindTemplate, computed,
   defineComponent,
   ref,
   refComponents,
 } from '@muban/muban';
+import { AppFooter } from '../app-footer/AppFooter';
 import { AppHeader } from '../app-header/AppHeader';
 import { TodoItem } from '../todo-item/TodoItem';
 import { todoItemTemplate } from '../todo-item/TodoItem.template';
@@ -15,6 +16,7 @@ export const App = defineComponent({
     todoList: 'todoList',
     todoItems: refComponents(TodoItem),
     appHeader: refComponents(AppHeader),
+    appFooter: refComponents(AppFooter),
   },
   setup({ refs}) {
     const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
@@ -40,6 +42,12 @@ export const App = defineComponent({
         todos,
         (items ) => items.map(itemData => todoItemTemplate(itemData)),
       ),
+      bind(refs.appFooter, {
+        activeTodoCount: computed(() => todos.value.filter(todo => !todo.isCompleted).length),
+        onClearCompleted() {
+          todos.value = todos.value.filter(todo => !todo.isCompleted);
+        }
+      })
     ];
   }
 });
