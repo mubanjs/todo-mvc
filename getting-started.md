@@ -620,7 +620,10 @@ the `editing` css class.
 Then we added a binding for `refs.title` where we add a `dblclick` event. In this event we're switching
 `isEditing. value` to `true`.
 Note that we're using `.value` when reading or writing the value stored inside the `ref`.
+
 We are also focussing the edit input – but with a small delay to give the DOM time to update itself.
+Note that to let typescript understand we can do `element?.focus()` we have now typed our input ref as
+`editInput: refElement<HTMLInputElement>('editInput'),`.
 
 And we created an `editValue` ref, initialising it the extracted value from the `props`, and use that for the `textInput` 
 binding on your `refs.editInput` – which set the initial value correctly, but will also change the `ref` when updating
@@ -974,4 +977,217 @@ So our next step is to propagate changes from the `TodoItem` components back to 
 ### Syncing `TodoItem` with the `App`
 
 For this next step we're going to make a few changes in the `TodoItem` component. Currently, that component is 
-"stateful" (in regard to the title/completed state), 
+"stateful" (in regard to the title/completed), since it keeps that state internally. Since we want to have that 
+managed by the `App` now, we want the `TodoItem` to become "stateless".
+
+We can do that by removing the internal `ref`, using the `props` directly in our bindings, and dispatch `change` 
+events whenever those values update. Then make sure to update our `App` component connect everything up.
+
+The changes in `TodoItem` look like this:
+
+We add a `prop` to trigger changes. 
+```ts
+onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
+```
+
+We **remove** the `refs` that stored the internal state:
+```ts
+const isCompleted = ref(props.isCompleted); // remove
+const title = ref(props.title); // remove
+```
+
+We update our `exitEditing` function with these changes:
+```ts
+if (saveValue) {
+  // now calls onChange
+  props.onChange?.({ title: editValue.value });
+} else {
+  // now uses `props.title`
+  editValue.value = props.title;
+}
+```
+
+We change our `title` and `isCompleted` bindings to use the `props` in a `computed`.
+If we don't wrap it in a `computed`, we would be passing a non-reactive value, which means our bindings wouldn't update.
+
+```ts
+// for the css binding on `refs.self`
+completed: computed(() => props.isCompleted),
+
+// for our binding on `refs.title`
+text: computed(() => props.title),
+```
+
+Then we update our `checked` binding to be "read only", and add an `event` binding on the `completedInput`.
+We don't need the two-way binding anymore in our new "stateless" setup.
+
+```ts
+bind(refs.completedInput, {
+   checked: computed(() => props.isCompleted),
+   event: {
+      change() {
+         props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
+      }
+   }
+}),
+```
+
+We also changed the type of our `computedInput` ref definition, so TypeScript understands we can access `.checked`;
+```ts
+completedInput: refElement<HTMLInputElement>('completedInput'),
+```
+
+Our `TodoItem` now looks like this:
+
+```ts
+import { bind, computed, defineComponent, propType, ref, refElement } from '@muban/muban';
+
+export const TodoItem = defineComponent({
+  name: 'todo-item',
+  refs: {
+    completedInput: refElement<HTMLInputElement>('completedInput'),
+    title: 'title',
+    destroyButton: 'destroyButton',
+    editInput: refElement<HTMLInputElement>('editInput'),
+  },
+  props: {
+    title: propType.string.source({ type: 'text', target: 'title' }),
+    isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
+    onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
+  },
+  setup({ props, refs}) {
+    const isEditing = ref(false);
+    // since we can exit edit mode without saving, we need to store the temp value here
+    const editValue = ref(props.title);
+
+    const exitEditing = (saveValue = false) => {
+      // either save the value, or restore it to the previous state
+      if (saveValue) {
+        props.onChange?.({ title: editValue.value });
+      } else {
+        editValue.value = props.title;
+      }
+      // exit editing mode
+      isEditing.value = false;
+    }
+
+    return [
+      bind(refs.self, {
+        css: {
+          completed: computed(() => props.isCompleted),
+          editing: isEditing,
+        }
+      }),
+      bind(refs.completedInput, {
+        checked: computed(() => props.isCompleted),
+        event: {
+          change() {
+            props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
+          }
+        }
+      }),
+      bind(refs.title, {
+        event: {
+          dblclick() {
+            isEditing.value = true;
+            // delay focussing until the element is updated to `display: block`
+            // the `hasFocus` binding has the same issue – being too quick
+            queueMicrotask(() => {
+              refs.editInput.element?.focus();
+            })
+          },
+        },
+        text: computed(() => props.title),
+      }),
+      bind(refs.editInput, {
+        textInput: editValue,
+        event: {
+          keydown(event) {
+            if (['Esc', 'Escape'].includes(event.key)) {
+              exitEditing();
+            } else if (['Enter'].includes(event.key)) {
+              exitEditing(true);
+            }
+          },
+          blur() {
+            exitEditing(true);
+          }
+        }
+      })
+    ];
+  }
+})
+```
+
+Then to sync everything up, we add this new binding to our `App`:
+
+```ts
+...bindMap(refs.todoItems, (_, refIndex) => ({
+  ...todos.value[refIndex],
+  onChange(newProps) {
+    todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
+  }
+})),
+```
+
+We're using `bindMap` as a utility to create a unique binding for each item in our component collection. It returns 
+an `Array`, so we `...` spread it out.
+
+For each item in the collection it executes the callback function, where we receive the ref to the individual 
+component, and the index in the list.
+
+With this we can pass our `title` and `isCompleted` as `todos.value[refIndex]`, and add the `onChange` callback.
+Whenever `onChange` is called, we map over our todo list, and update the changed item based on index. The newly 
+mapped array is assigned back to `todos.value`, which will make sure that whenever the `bindTemplate` is updating 
+later, it passes the update values to each item. 
+
+
+Which now looks like:
+
+```ts
+import {
+  bind, bindMap,
+  bindTemplate,
+  defineComponent,
+  ref,
+  refComponents,
+} from '@muban/muban';
+import { AppHeader } from '../app-header/AppHeader';
+import { TodoItem } from '../todo-item/TodoItem';
+import { todoItemTemplate } from '../todo-item/TodoItem.template';
+
+export const App = defineComponent({
+  name: "app",
+  refs: {
+    todoList: 'todoList',
+    todoItems: refComponents(TodoItem),
+    appHeader: refComponents(AppHeader),
+  },
+  setup({ refs}) {
+    const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
+    const todos = ref(initialTodoItems);
+
+    return [
+      bind(refs.appHeader, {
+        onCreate(newTodo) {
+          todos.value = todos.value.concat({title: newTodo, isCompleted: false});
+        }
+      }),
+      ...bindMap(refs.todoItems, (_, refIndex) => ({
+        ...todos.value[refIndex],
+        onChange(newProps) {
+          todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
+        }
+      })),
+      bindTemplate(
+        refs.todoList,
+        todos,
+        (items ) => items.map(itemData => todoItemTemplate(itemData)),
+      ),
+    ];
+  }
+});
+```
+
+With this in place, if we check our app again, we should be able to edit existing and add new todo items, without 
+anything getting reverted to outdated information.

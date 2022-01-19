@@ -37,6 +37,7 @@ export const TodoItem = defineComponent({
         }
       }),
       bind(refs.completedInput, {
+        checked: computed(() => props.isCompleted),
         event: {
           change() {
             props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
