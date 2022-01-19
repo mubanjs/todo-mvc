@@ -1198,3 +1198,42 @@ Now that we can Add and Edit items, it's time for Deleting ones as well. For thi
 bindings to our delete button, and add a `onDelete` prop we can call. Then our `App` we need to pass the `onDelete`, 
 and remove our Todo from the list.
 
+In our `TodoIte` we add our `onDelete` prop:
+```ts
+onDelete: propType.func.optional.shape<() => void>(),
+```
+
+Then add our `click` binding:
+```ts
+bind(refs.destroyButton, {
+  click() {
+    props.onDelete?.();
+  }
+})
+```
+
+And lastly, in our `App` we handle the deletion by filtering the `todos` based on index.
+```ts
+...bindMap(refs.todoItems, (_, refIndex) => ({
+   ...todos.value[refIndex],
+   onChange(newProps) {
+      todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
+   },
+   onDelete() {
+      todos.value = todos.value.filter((_, index) => index !== refIndex)
+   }
+})),
+```
+
+Now we should be able to delete items.
+
+## `AppFooter` - to manage our todos
+
+Next up the `AppFooter`, where we:
+
+1. show the uncompleted todo count – which should update after we add/remove/complete any todo
+2. can clear the completed todos from the list – easier than deleting them one by one
+3. filter our todos based on `isCompleted`
+
+### Uncompleted count
+
