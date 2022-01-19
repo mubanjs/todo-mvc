@@ -970,3 +970,8 @@ This is because those edit changes are stored locally in our component, and our 
 our Todos when it updates the list.
 
 So our next step is to propagate changes from the `TodoItem` components back to the `App`.
+
+### Syncing `TodoItem` with the `App`
+
+For this next step we're going to make a few changes in the `TodoItem` component. Currently, that component is 
+"stateful" (in regard to the title/completed state), 

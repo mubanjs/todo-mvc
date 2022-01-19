@@ -1,5 +1,5 @@
 import {
-  bind,
+  bind, bindMap,
   bindTemplate,
   defineComponent,
   ref,
@@ -26,6 +26,12 @@ export const App = defineComponent({
           todos.value = todos.value.concat({title: newTodo, isCompleted: false});
         }
       }),
+      ...bindMap(refs.todoItems, (_, refIndex) => ({
+        ...todos.value[refIndex],
+        onChange(newProps) {
+          todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
+        }
+      })),
       bindTemplate(
         refs.todoList,
         todos,

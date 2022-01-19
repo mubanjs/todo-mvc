@@ -1,9 +1,9 @@
-import { bind, defineComponent, propType, ref, refElement } from '@muban/muban';
+import { bind, computed, defineComponent, propType, ref, refElement } from '@muban/muban';
 
 export const TodoItem = defineComponent({
   name: 'todo-item',
   refs: {
-    completedInput: 'completedInput',
+    completedInput: refElement<HTMLInputElement>('completedInput'),
     title: 'title',
     destroyButton: 'destroyButton',
     editInput: refElement<HTMLInputElement>('editInput'),
@@ -11,20 +11,19 @@ export const TodoItem = defineComponent({
   props: {
     title: propType.string.source({ type: 'text', target: 'title' }),
     isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
+    onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
   },
   setup({ props, refs}) {
-    const isCompleted = ref(props.isCompleted);
     const isEditing = ref(false);
-    const title = ref(props.title);
     // since we can exit edit mode without saving, we need to store the temp value here
     const editValue = ref(props.title);
 
     const exitEditing = (saveValue = false) => {
       // either save the value, or restore it to the previous state
       if (saveValue) {
-        title.value = editValue.value;
+        props.onChange?.({ title: editValue.value });
       } else {
-        editValue.value = title.value;
+        editValue.value = props.title;
       }
       // exit editing mode
       isEditing.value = false;
@@ -33,12 +32,16 @@ export const TodoItem = defineComponent({
     return [
       bind(refs.self, {
         css: {
-          completed: isCompleted,
+          completed: computed(() => props.isCompleted),
           editing: isEditing,
         }
       }),
       bind(refs.completedInput, {
-        checked: isCompleted
+        event: {
+          change() {
+            props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
+          }
+        }
       }),
       bind(refs.title, {
         event: {
@@ -51,7 +54,7 @@ export const TodoItem = defineComponent({
             })
           },
         },
-        text: title,
+        text: computed(() => props.title),
       }),
       bind(refs.editInput, {
         textInput: editValue,
