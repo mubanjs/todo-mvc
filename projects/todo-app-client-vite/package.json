@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:pages": "tsc && vite build --base=/todo-mvc/projects/todo-mvc-client/",
     "preview": "vite preview"
   },
   "devDependencies": {

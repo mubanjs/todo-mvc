@@ -29,7 +29,7 @@ jobs:
         run: npm run docs:build
 
       - name: Build todo-app-client
-        run: npm run build -w=projects/todo-app-client-vite
+        run: npm run build:pages -w=projects/todo-app-client-vite
 
       - name: Move packages to dist
         run: |
