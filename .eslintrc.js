@@ -8,7 +8,7 @@ module.exports = {
     'consistent-return': 'off',
     'import/no-extraneous-dependencies': [
       'error',
-      { packageDir: ['./', './projects/todo-app-client-vite'] },
+      { packageDir: ['./', './projects/todo-app-client'] },
     ],
   },
   ignorePatterns: ['.eslintrc.js'],

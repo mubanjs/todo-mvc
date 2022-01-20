@@ -29,13 +29,13 @@ jobs:
         run: npm run docs:build
 
       - name: Build todo-app-client
-        run: npm run build:pages -w=projects/todo-app-client-vite
+        run: npm run build:pages -w=projects/todo-app-client
 
       - name: Move packages to dist
         run: |
           cp -r docs/.vuepress/dist ./dist
           mkdir dist/projects
-          cp -r projects/todo-app-client-vite/dist ./dist/projects/todo-mvc-client
+          cp -r projects/todo-app-client/dist ./dist/projects/todo-mvc-client
 
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v2
