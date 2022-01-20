@@ -10,8 +10,5 @@
   "devDependencies": {
     "typescript": "^4.4.4",
     "vite": "^2.7.2"
-  },
-  "dependencies": {
-    "@muban/hooks": "^1.0.0-alpha.3"
   }
 }

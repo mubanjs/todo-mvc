@@ -8,6 +8,7 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
+    "@muban/hooks": "^1.0.0-alpha.3",
     "@muban/muban": "^1.0.0-alpha.28",
     "@muban/template": "^1.0.0-alpha.3",
     "nanoid": "^3.2.0"
