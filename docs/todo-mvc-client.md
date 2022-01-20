@@ -39,21 +39,13 @@ we are only going to render a custom title in the template, with no logic in the
 
 ### Template file
 Create a `src/components/App/App.template.ts` for our template;
-```ts
-import { html, ComponentTemplateResult } from "@muban/template";
 
-export type AppTemplateProps = {
-  title?: string;
-};
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.template.ts">
 
-export function appTemplate({ title = 'Todos' }: AppTemplateProps): ComponentTemplateResult {
-  return html`
-    <div data-component="app">
-      <h1>${title}</h1>
-    </div>
-  `;
-}
-```
+@[code ts](./steps/todo-mvc-client-app-template-1.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 Here we have done the following;
 
@@ -74,19 +66,15 @@ Here we have done the following;
 
 ### Component file
 
-Now that we have our template, let's create the Component itself by creating `src/components/App/App.template.ts`.
+Now that we have our template, let's create the Component itself by creating `src/components/App/App.ts`.
 
-```ts
-import { defineComponent } from "@muban/muban";
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
 
-export const App = defineComponent({
-  name: "app",
-  setup() {
-    console.log('App Running...')
-    return [];
-  }
-});
-```
+@[code ts](./steps/todo-mvc-client-app-1.ts)
+
+</CodeGroupItem>
+</CodeGroup>
 
 Here we have done the following:
 
@@ -108,20 +96,13 @@ Now that we have our first components (a template and logic file), it's time to 
 
 In the `main.ts` (that was created by Vite), change the code to this:
 
-```ts
-import './style.css'
+<CodeGroup>
+<CodeGroupItem title="src/main.ts">
 
-import { createApp } from "@muban/muban";
-import { App } from "./components/App/App";
-import { appTemplate } from "./components/App/App.template";
+@[code ts](./steps/todo-mvc-client-main-1.ts)
 
-const appRoot = document.getElementById("app")!;
-const app = createApp(App);
-
-app.mount(appRoot, appTemplate, {
-  title: 'Todos'
-});
-```
+</CodeGroupItem>
+</CodeGroup>
 
 It does the following things:
 
@@ -157,26 +138,13 @@ The HTML can be cut into 4 different templates:
 
 Create a `src/components/todo-item/TodoItem.template.ts` with the following content;
 
-```ts
-import { html } from '@muban/template';
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.template.ts">
 
-export type TodoItemTemplateProps = {
-  title: string;
-  isCompleted: boolean;
-}
+@[code ts](./steps/todo-mvc-client-todoitem-template-1.ts)
 
-export function todoItemTemplate({ title, isCompleted }: TodoItemTemplateProps) {
-  // there is also an `editing` class, but that's only set when interacting with the element
-  return html`<li data-component="todo-item" class="${isCompleted ? 'completed' : ''}">
-    <div class="view">
-      <input data-ref="completedInput" class="toggle" type="checkbox" checked=${isCompleted} />
-      <label data-ref="title">${title}</label>
-      <button data-ref="destroyButton" class="destroy"></button>
-    </div>
-    <input data-ref="editInput" class="edit" />
-  </li>`
-}
-```
+</CodeGroupItem>
+</CodeGroup>
 
 This template has two properties, the `title`, and `isCompleted`  to indicate it's done. From a "data" point of view,
 this is all we know about the item. This is all the information we are going to save into `LocalStorage` later.
@@ -215,20 +183,13 @@ element, or use the `checked` attribute on the input.
 
 Create a `src/components/app-header/AppHeader.template.ts` with the following content;
 
-```ts{8-10}
-import { html } from '@muban/template';
+<CodeGroup>
+<CodeGroupItem title="src/components/app-header/AppHeader.template.ts">
 
-export type AppHeaderTemplateProps = {
-  title?: string;
-};
+@[code ts{8,9,11}](./steps/todo-mvc-client-appheader-template-1.ts)
 
-export function appHeaderTemplate({ title = 'Todos'}: AppHeaderTemplateProps = {}) {
-  return html`<div data-component="app-header" class="header">
-      <h1>${title}</h1>
-      <input data-ref="newTodoInput" class="new-todo" placeholder="What needs to be done?" autofocus />
-    </div>`;
-}
-```
+</CodeGroupItem>
+</CodeGroup>
 
 This template is similar to what we had before in the `App` template (the `title`). It also has a input to enter new
 todos.
@@ -245,37 +206,12 @@ There is no initial data in this template that our Component needs access to lat
 
 Create a `src/components/app-footer/AppFooter.template.ts` with the following content;
 
-```ts
-import { html } from '@muban/template';
+<CodeGroup>
+<CodeGroupItem title="src/components/app-footer/AppFooter.template.ts">
 
-type AppFooterTemplateProps = {
-   uncompletedCount?: number;
-   selectedFilter?: 'active' | 'completed';
-}
-
-export function appFooterTemplate({ uncompletedCount = 0, selectedFilter}: AppFooterTemplateProps = {}) {
-   return html`
-    <footer data-component="app-footer" class="footer">
-      <span data-ref="todoCount" class="todo-count">
-        <strong>${uncompletedCount}</strong> ${uncompletedCount === 1 ? 'items' : 'item'} left
-      </span>
-      <ul class="filters">
-        <li>
-          <a data-ref="filterAll" class="${!selectedFilter ? 'selected' : ''}" href="#/">All</a>
-        </li>
-        <li>
-          <a data-ref="filterActive" class="${selectedFilter === 'active' ? 'selected' : ''}" href="#/active">Active</a>
-        </li>
-        <li>
-          <a data-ref="filterCompleted" class="${selectedFilter === 'completed' ? 'selected' : ''}" href="#/completed">Completed</a>
-        </li>
-      </ul>
-      <!-- Hidden if no completed items are left ↓ -->
-      <button data-ref="clearCompletedButton" class="clear-completed">Clear completed</button>
-    </footer>
-  `;
-}
-```
+@[code ts](./steps/todo-mvc-client-appfooter-template-1.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 This template has 3 purposes:
 
@@ -303,39 +239,12 @@ And lastly we added `data-ref="clearCompletedButton"` to interact with the clear
 
 Update our `src/components/app/App.template.ts` to the following;
 
-```ts{15,19-21,23}
-import { ComponentTemplateResult, html } from '@muban/template';
-import { appFooterTemplate } from '../app-footer/AppFooter.template';
-import { appHeaderTemplate } from '../app-header/AppHeader.template';
-import { todoItemTemplate, TodoItemTemplateProps } from '../todo-item/TodoItem.template';
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.template.ts">
 
-export type AppTemplateProps = {
-   title?: string;
-   todos?: Array<TodoItemTemplateProps>;
-};
-
-export function appTemplate({ title, todos = [] }: AppTemplateProps = {}): ComponentTemplateResult {
-   return html`
-    <div data-component="app">
-      <section class="todoapp">
-        ${appHeaderTemplate({ title })}
-        <section class="main">
-          <input data-ref="toggleAllInput" id="toggle-all" class="toggle-all" type="checkbox" />
-          <label for="toggle-all">Mark all as complete</label>
-          <ul data-ref="todoList" class="todo-list">
-            ${todos.map(todo => todoItemTemplate(todo))}
-          </ul>
-        </section>
-        ${appFooterTemplate( { uncompletedCount: todos.filter(todo => !todo.isCompleted).length })}
-      </section>
-      <footer class="info">
-        <p>Double-click to edit a todo</p>
-        <p>Created by <a href="http://github.com/mubanjs">Muban</a></p>
-      </footer>
-    </div>
-  `;
-}
-```
+@[code ts{8,15,19-21,23}](./steps/todo-mvc-client-app-template-2.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 This is where everything comes together. Keep in mind that we're still just rendering templates, the "initial state"
 or our application, that is normally rendered on the server.
@@ -357,30 +266,12 @@ And we have a `data-ref="toggleAllInput"` here as well, to toggle the state of a
 And finally, since we update our App template, we should also pass different data when mounting our app. Please
 update `main.ts` to the following:
 
-```ts{12-21}
-import './style.css'
+<CodeGroup>
+<CodeGroupItem title="src/main.ts">
 
-import { createApp } from "@muban/muban";
-import { App } from "./components/app/App";
-import { appTemplate } from "./components/app/App.template";
-
-const appRoot = document.getElementById("app")!;
-const app = createApp(App);
-
-app.mount(appRoot, appTemplate, {
-  title: 'Todos',
-  todos: [
-    {
-      title: 'Taste JavaScript',
-      isCompleted: true,
-    },
-    {
-      title: 'Buy a unicorn',
-      isCompleted: false,
-    }
-  ]
-});
-```
+@[code ts{12-21}](./steps/todo-mvc-client-main-2.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 In here we're passing the `todos` array with the `title` and `isCompleted` for each item. Everything in that object
 is typed, so your editor knows exactly what to specify here, and you will get an error if you make a typo, or forget
@@ -401,16 +292,12 @@ this in the parent component, but let's start with just the `TodoItem` in isolat
 
 Create `src/components/todo-item/TodoItem.ts`, first with an empty component.
 
-```ts
-import { defineComponent } from '@muban/muban';
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-export const TodoItem = defineComponent({
-  name: 'todo-item',
-  setup() {
-    return [];
-  }
-})
-```
+@[code ts](./steps/todo-mvc-client-todoitem-1.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 Nothing special going on here, just make sure that the `name` matches that in the `data-component` template.
 
@@ -418,22 +305,12 @@ Nothing special going on here, just make sure that the `name` matches that in th
 
 Next, let's add our refs;
 
-```ts{5-10}
-import { defineComponent } from '@muban/muban';
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-export const TodoItem = defineComponent({
-  name: 'todo-item', 
-  refs: {
-    completedInput: 'completedInput',
-    title: 'title',
-    destroyButton: 'destroyButton',
-    editInput: 'editInput',
-  },
-  setup() {
-    return [];
-  }
-})
-```
+@[code ts{5-10}](./steps/todo-mvc-client-todoitem-2.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 The `refs` object specifies which elements from the template / DOM we want to use in our component. The keys of that
 object is what we will be using in our `setup` function later. The value is the "definition" of the ref – in this
@@ -450,26 +327,12 @@ also be covered at later steps.
 
 Next up are the props;
 
-```ts{11-14}
-import { defineComponent, propType } from '@muban/muban';
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-export const TodoItem = defineComponent({
-  name: 'todo-item', 
-  refs: {
-    completedInput: 'completedInput',
-    title: 'title',
-    destroyButton: 'destroyButton',
-    editInput: 'editInput',
-  },
-  props: {
-    title: propType.string.source({ type: 'text', target: 'title' }),
-    isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
-  },
-  setup() {
-    return [];
-  }
-})
-```
+@[code ts{11-14}](./steps/todo-mvc-client-todoitem-3.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 Instead of (only) receiving props from our parent components, in most cases we extract props from the HTML. Here
 want to extract the `title` of the do, and if it's `isCompleted` or not.
@@ -495,35 +358,12 @@ missing.
 
 #### setup
 
-```ts{15-26}
-import { bind, defineComponent, propType, ref } from '@muban/muban';
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-export const TodoItem = defineComponent({
-  name: 'todo-item',
-   refs: {
-      completedInput: 'completedInput',
-      title: 'title',
-      destroyButton: 'destroyButton',
-      editInput: 'editInput',
-   },
-   props: {
-      title: propType.string.source({ type: 'text', target: 'title' }),
-      isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
-   },
-  setup({ props, refs}) {
-    const isCompleted = ref(props.isCompleted);
-
-    return [
-      bind(refs.self, {
-        css: { 'completed': isCompleted }
-      }),
-      bind(refs.completedInput, {
-        checked: isCompleted
-      })
-    ];
-  }
-})
-```
+@[code ts{15-26}](./steps/todo-mvc-client-todoitem-4.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 Lastly we work on the setup function, where we add our bindings.
 
@@ -555,16 +395,12 @@ To have our `TodoItem` component initialized based on the HTML, we need to regis
 actually need these components as refs to add bindings to, we can add them in the `components` array, just so they
 are "known".
 
-```ts{3}
-export const App = defineComponent({
-  name: "app",
-  components: [TodoItem],
-  setup() {
-    console.log('App Running...')
-    return [];
-  }
-});
-```
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
+
+@[code ts{2,6}](./steps/todo-mvc-client-app-2.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 We added `components: [TodoItem],` here.
 
@@ -576,43 +412,15 @@ are going to implement the editing state.
 
 #### Editing state
 
-To reduce the amount of duplicate code, we are just focussing on the `setup` part now;
+To reduce the amount of duplicate code, we are just focussing on the `setup` part of the 
+`TodoItem` now;
 
-```ts{3-5,11,17-31}
-setup({ props, refs}) {
-   const isCompleted = ref(props.isCompleted);
-   const isEditing = ref(false);
-   // since we can exit edit mode without saving, we need to store the temp value here
-   const editValue = ref(props.title);
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-   return [
-      bind(refs.self, {
-         css: {
-            completed: isCompleted,
-            editing: isEditing,
-         }
-      }),
-      bind(refs.completedInput, {
-         checked: isCompleted
-      }),
-      bind(refs.title, {
-         event: {
-            dblclick() {
-               isEditing.value = true;
-               // delay focussing until the element is updated to `display: block`
-               // the `hasFocus` binding has the same issue – being too quick
-               queueMicrotask(() => {
-                  refs.editInput.element?.focus();
-               })
-            },
-         },
-      }),
-      bind(refs.editInput, {
-         textInput: editValue,
-      })
-   ];
-}
-```
+@[code{15-47} ts{3-5,11,17-31}](./steps/todo-mvc-client-todoitem-5.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 We created a `isEditing` ref to switch editing mode. We updated the `css` binding on `refs.self` to include toggling
 the `editing` css class.
@@ -632,66 +440,16 @@ the input.
 When we visit our page now, and double click on the label, it should switch to editing mode, and focus the input.
 Unfortunately we don't have a way to exit the editing mode. This is our next step;
 
-```ts{6,8-17,40,44-55}
-  setup({ props, refs}) {
-    const isCompleted = ref(props.isCompleted);
-    const isEditing = ref(false);
-    // since we can exit edit mode without saving, we need to store the temp value here
-    const editValue = ref(props.title);
-    const title = ref(props.title);
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-    const exitEditing = (saveValue = false) => {
-      // either save the value, or restore it to the previous state
-      if (saveValue) {
-        title.value = editValue.value;
-      } else {
-        editValue.value = title.value;
-      }
-      // exit editing mode
-      isEditing.value = false;
-    }
+@[code{15-72} ts{6,8-17,40,44-55}](./steps/todo-mvc-client-todoitem-6.ts)
+</CodeGroupItem>
+<CodeGroupItem title="Complete">
 
-    return [
-      bind(refs.self, {
-        css: {
-          completed: isCompleted,
-          editing: isEditing,
-        }
-      }),
-      bind(refs.completedInput, {
-        checked: isCompleted
-      }),
-      bind(refs.title, {
-        event: {
-          dblclick() {
-            isEditing.value = true;
-            // delay focussing until the element is updated to `display: block`
-            // the `hasFocus` binding has the same issue – being too quick
-            queueMicrotask(() => {
-              refs.editInput.element?.focus();
-            })
-          },
-        },
-        text: title,
-      }),
-      bind(refs.editInput, {
-        textInput: editValue,
-        event: {
-          keydown(event) {
-            if (['Esc', 'Escape'].includes(event.key)) {
-              exitEditing();
-            } else if (['Enter'].includes(event.key)) {
-              exitEditing(true);
-            }
-          },
-          blur() {
-            exitEditing(true);
-          }
-        }
-      })
-    ];
-  }
-```
+@[code ts](./steps/todo-mvc-client-todoitem-6.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 Starting at the bottom, we added a `keydown` and `blur` event to detect the different ways to exit our editing state.
 Some of which should save the value (passing `true`), where hitting Escape should discard our entered value.
@@ -711,50 +469,31 @@ component as well.
 
 As with the TodoItem, let's create our component file in `src/components/app-header/AppHeader.ts`.
 
-```ts
-import { defineComponent } from '@muban/muban';
+<CodeGroup>
+<CodeGroupItem title="src/components/app-header/AppHeader.ts">
 
-export const AppHeader = defineComponent({
-  name: 'app-header',
-  setup({ refs, props }) {
-    return [];
-  }
-})
-```
+@[code ts](./steps/todo-mvc-client-appheader-1.ts)
+</CodeGroupItem>
+</CodeGroup>
 
-And to make sure we don't forget, add it to our `App.ts` component list `components: [TodoItem, AppHeader],`.
+And to make sure we don't forget, add the `AppHeader` to the `components` array in `App`. 
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
+
+@[code ts{2,7}](./steps/todo-mvc-client-app-3.ts)
+</CodeGroupItem>
+</CodeGroup>
+
 
 With the basic setup there, let's add our refs, props and bindings.
 
-```ts{6,9,12,14-24}
-import { bind, defineComponent, propType, ref } from '@muban/muban';
+<CodeGroup>
+<CodeGroupItem title="src/components/app-header/AppHeader.ts">
 
-export const AppHeader = defineComponent({
-  name: 'app-header',
-  refs: {
-    newTodoInput: 'newTodoInput',
-  },
-  props: {
-    onCreate: propType.func.optional.shape<(value: string) => void>()
-  },
-  setup({ refs, props }) {
-    const inputValue = ref('');
-    return [
-      bind(refs.newTodoInput, {
-        textInput: inputValue,
-        event: {
-          keyup(event) {
-            if (event.key === 'Enter') {
-              props.onCreate?.(inputValue.value);
-              inputValue.value = '';
-            }
-          }
-        }
-      })
-    ];
-  }
-})
-```
+@[code ts{6,9,12,14-24}](./steps/todo-mvc-client-appheader-2.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 We have our `newTodoInput` ref, that's used to add bindings to.
 
@@ -786,7 +525,7 @@ connected it to the parent. This is what's next.
 Before we start adding new todos, let's move the control of rendering our individual Todo items to our `App` component.
 
 First, we create a ref to store our todo data in:
-```ts
+```ts:no-line-numbers
 const todos = ref([]);
 ```
 
@@ -794,11 +533,12 @@ Next, we need to fill it with data. Since we already could have todos rendered o
 extract these items from the page. Since we already have our `TodoItem` components mounted, and their `props`
 extract the required info from the HTML, we can try to retrieve that information.
 
-```ts
+```ts:no-line-numbers
 refs: {
   todoItems: refComponents(TodoItem),
 },
 ```
+
 
 Here we define a new `ref` in our `App` component. We're using `refComponents` to get a collection of components. We
 pass `TodoItem` as a Component there, since we are interested in those. This will look for
@@ -808,9 +548,11 @@ components will be available in the setup function as `refs.todoItems`.
 Now that we have configured `TodoItem` as a `ref`, we can remove it from the `components: []` Array.
 
 In our setup function we can now access these refs to get access to the data;
-```ts
+```ts:no-line-numbers
 setup({ refs }) {
-  const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
+  const initialTodoItems = refs.todoItems
+    .getComponents()
+    .map(({ props: { title, isCompleted } }) => ({ title, isCompleted }));
   const todos = ref(initialTodoItems);
   
   return [];
@@ -825,7 +567,7 @@ setup({ refs }) {
 `initialTodoItems` now contains an array of todo objects, which we use to initialize our `todos` ref.
 
 If we would add `console.log(todos.value)`, we'd see:
-```js
+```js:no-line-numbers
 [
   { title: 'Taste JavaScript', isCompleted: true },
   { title: 'Buy a unicorn', isCompleted: false }
@@ -834,22 +576,9 @@ If we would add `console.log(todos.value)`, we'd see:
 
 In order to use this extracted data to render our Todo items (and later add or remove them), we use `bindTemplate`;
 
-```ts
-refs: {
-  todoList: 'todoList',
-  todoItems: refComponents(TodoItem),
-}
+@[code{9-12} ts{2}:no-line-numbers](./steps/todo-mvc-client-app-4.ts)
+@[code{19-23} ts{2-4}:no-line-numbers](./steps/todo-mvc-client-app-4.ts)
 
-// ...
-
-return [
-   bindTemplate(
-     refs.todoList,
-     todos,
-     (items ) => items.map(itemData => todoItemTemplate(itemData)),
-   ),
-]
-```
 
 1. First we add a `todoList` ref definition, this is the `<ul>` container for our Todo items.
 2. We pass this ref as our first parameter, since we want to modify the content of this element.
@@ -861,39 +590,12 @@ return [
 
 In total, our code should now look like this;
 
-```ts{14,17,20-21,24-28}
-import {
-  bind,
-  bindTemplate,
-  defineComponent,
-  ref,
-  refComponents,
-} from '@muban/muban';
-import { AppHeader } from '../app-header/AppHeader';
-import { TodoItem } from '../todo-item/TodoItem';
-import { todoItemTemplate } from '../todo-item/TodoItem.template';
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
 
-export const App = defineComponent({
-  name: "app",
-  components: [AppHeader],
-  refs: {
-    todoList: 'todoList',
-    todoItems: refComponents(TodoItem),
-  },
-  setup({ refs }) {
-    const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
-    const todos = ref(initialTodoItems);
-
-    return [
-      bindTemplate(
-        refs.todoList,
-        todos,
-        (items ) => items.map(itemData => todoItemTemplate(itemData)),
-      ),
-    ];
-  }
-});
-```
+@[code ts{8,10-11,14-17,20-22}](./steps/todo-mvc-client-app-4.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 And if you would look in the browser, nothing would have visually changed. However, we're now ready to add new Todos.
 
@@ -903,19 +605,11 @@ To get access to the new Todo, we need to pass our `onCreate` function to the `A
 
 We start by adding this as a `refComponent`, so we can bind to it. We can now also remove the `components` array
 completely.
-
-```ts
-appHeader: refComponents(AppHeader),
-```
+@[code{11-11} ts:no-line-numbers](./steps/todo-mvc-client-app-5.ts)
 
 Next, we add our binding;
-```ts
-bind(refs.appHeader, {
-  onCreate(newTodo) {
-    todos.value = todos.value.concat({title: newTodo, isCompleted: false});
-  }
-}),
-```
+@[code{20-24} ts:no-line-numbers](./steps/todo-mvc-client-app-5.ts)
+
 
 Here we pass the `onCreate` function to our `appHeader` component, so when you submit a new one, this function is
 called. In the function, we take our `newTodo` and create an object (completed is false when we add it), and add it
@@ -927,44 +621,13 @@ method to construct a new array with the new item, and assign that to `todos.val
 With this in place, our `bindTemplate` should automatically render our new Todo item when `onCreate` is called.
 
 Our `App` component now looks like this:
-```ts{17,24-28}
-import {
-  bind,
-  bindTemplate,
-  defineComponent,
-  ref,
-  refComponents,
-} from '@muban/muban';
-import { AppHeader } from '../app-header/AppHeader';
-import { TodoItem } from '../todo-item/TodoItem';
-import { todoItemTemplate } from '../todo-item/TodoItem.template';
 
-export const App = defineComponent({
-  name: "app",
-  refs: {
-    todoList: 'todoList',
-    todoItems: refComponents(TodoItem),
-    appHeader: refComponents(AppHeader),
-  },
-  setup({ refs}) {
-    const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
-    const todos = ref(initialTodoItems);
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
 
-    return [
-      bind(refs.appHeader, {
-        onCreate(newTodo) {
-          todos.value = todos.value.concat({title: newTodo, isCompleted: false});
-        }
-      }),
-      bindTemplate(
-        refs.todoList,
-        todos,
-        (items ) => items.map(itemData => todoItemTemplate(itemData)),
-      ),
-    ];
-  }
-});
-```
+@[code ts{11,20-24}](./steps/todo-mvc-client-app-5.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 And if you look at your browser now, you should be able to add new Todos!
 
@@ -986,156 +649,51 @@ events whenever those values update. Then make sure to update our `App` componen
 The changes in `TodoItem` look like this:
 
 We add a `prop` to trigger changes.
-```ts
-onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
-```
+@[code{14-15} ts:no-line-numbers](./steps/todo-mvc-client-todoitem-7.ts)
+
 
 We **remove** the `refs` that stored the internal state:
-```ts
-const isCompleted = ref(props.isCompleted); // remove
-const title = ref(props.title); // remove
-```
+
+@[code{16-16} ts:no-line-numbers](./steps/todo-mvc-client-todoitem-6.ts)
+@[code{20-20} ts:no-line-numbers](./steps/todo-mvc-client-todoitem-6.ts)
+
 
 We update our `exitEditing` function with these changes:
-```ts
-if (saveValue) {
-  // now calls onChange
-  props.onChange?.({ title: editValue.value });
-} else {
-  // now uses `props.title`
-  editValue.value = props.title;
-}
-```
+@[code{24-28} ts{2,4}:no-line-numbers](./steps/todo-mvc-client-todoitem-7.ts)
 
 We change our `title` and `isCompleted` bindings to use the `props` in a `computed`.
 If we don't wrap it in a `computed`, we would be passing a non-reactive value, which means our bindings wouldn't update.
 
-```ts
-// for the css binding on `refs.self`
-completed: computed(() => props.isCompleted),
+@[code{34-39} ts{3}:no-line-numbers](./steps/todo-mvc-client-todoitem-7.ts)
+@[code{50-62} ts{12}:no-line-numbers](./steps/todo-mvc-client-todoitem-7.ts)
 
-// for our binding on `refs.title`
-text: computed(() => props.title),
-```
+Then we update our `checked` binding on the `completedInput` ref to be read/writable. We read 
+the incoming props, and when the `checked` changes, we call the `onChange` with the new value.
 
-Then we update our `checked` binding to be "read only", and add an `event` binding on the `completedInput`.
-We don't need the two-way binding anymore in our new "stateless" setup.
-
-```ts
-bind(refs.completedInput, {
-   checked: computed(() => props.isCompleted),
-   event: {
-      change() {
-         props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
-      }
-   }
-}),
-```
-
-We also changed the type of our `computedInput` ref definition, so TypeScript understands we can access `.checked`;
-```ts
-completedInput: refElement<HTMLInputElement>('completedInput'),
-```
+@[code{40-49} ts{2-9}:no-line-numbers](./steps/todo-mvc-client-todoitem-7.ts)
 
 Our `TodoItem` now looks like this:
 
 <CodeGroup>
 <CodeGroupItem title="src/components/todo-item/TodoItem.ts">
 
-```ts{6,14,24,26,35,39-46,58}
-import { bind, computed, defineComponent, propType, ref, refElement } from '@muban/muban';
-
-export const TodoItem = defineComponent({
-  name: 'todo-item',
-  refs: {
-    completedInput: refElement<HTMLInputElement>('completedInput'),
-    title: 'title',
-    destroyButton: 'destroyButton',
-    editInput: refElement<HTMLInputElement>('editInput'),
-  },
-  props: {
-    title: propType.string.source({ type: 'text', target: 'title' }),
-    isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
-    onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
-  },
-  setup({ props, refs}) {
-    const isEditing = ref(false);
-    // since we can exit edit mode without saving, we need to store the temp value here
-    const editValue = ref(props.title);
-
-    const exitEditing = (saveValue = false) => {
-      // either save the value, or restore it to the previous state
-      if (saveValue) {
-        props.onChange?.({ title: editValue.value });
-      } else {
-        editValue.value = props.title;
-      }
-      // exit editing mode
-      isEditing.value = false;
-    }
-
-    return [
-      bind(refs.self, {
-        css: {
-          completed: computed(() => props.isCompleted),
-          editing: isEditing,
-        }
-      }),
-      bind(refs.completedInput, {
-        checked: computed(() => props.isCompleted),
-        event: {
-          change() {
-            props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
-          }
-        }
-      }),
-      bind(refs.title, {
-        event: {
-          dblclick() {
-            isEditing.value = true;
-            // delay focussing until the element is updated to `display: block`
-            // the `hasFocus` binding has the same issue – being too quick
-            queueMicrotask(() => {
-              refs.editInput.element?.focus();
-            })
-          },
-        },
-        text: computed(() => props.title),
-      }),
-      bind(refs.editInput, {
-        textInput: editValue,
-        event: {
-          keydown(event) {
-            if (['Esc', 'Escape'].includes(event.key)) {
-              exitEditing();
-            } else if (['Enter'].includes(event.key)) {
-              exitEditing(true);
-            }
-          },
-          blur() {
-            exitEditing(true);
-          }
-        }
-      })
-    ];
-  }
-})
-```
-
+@[code ts{14-15,25,27,36,41-48,61}](./steps/todo-mvc-client-todoitem-7.ts)
 </CodeGroupItem>
 </CodeGroup>
 
 
 Then to sync everything up, we add this new binding to our `App`:
 
-```ts
-...bindMap(refs.todoItems, (_, refIndex) => ({
-  ...todos.value[refIndex],
-  onChange(newProps) {
-    todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
-  }
-})),
-```
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
+
+@[code{28-34} ts](./steps/todo-mvc-client-app-6.ts)
+</CodeGroupItem>
+<CodeGroupItem title="Complete">
+
+@[code ts{28-34}](./steps/todo-mvc-client-app-6.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 We're using `bindMap` as a utility to create a unique binding for each item in our component collection. It returns
 an `Array`, so we `...` spread it out.
@@ -1143,92 +701,52 @@ an `Array`, so we `...` spread it out.
 For each item in the collection it executes the callback function, where we receive the ref to the individual
 component, and the index in the list.
 
-With this we can pass our `title` and `isCompleted` as `todos.value[refIndex]`, and add the `onChange` callback.
 Whenever `onChange` is called, we map over our todo list, and update the changed item based on index. The newly
 mapped array is assigned back to `todos.value`, which will make sure that whenever the `bindTemplate` is updating
 later, it passes the update values to each item.
 
-
-Which now looks like:
-
-<CodeGroup>
-<CodeGroupItem title="src/components/app/App.ts">
-
-```ts{29-34}
-import {
-  bind, bindMap,
-  bindTemplate,
-  defineComponent,
-  ref,
-  refComponents,
-} from '@muban/muban';
-import { AppHeader } from '../app-header/AppHeader';
-import { TodoItem } from '../todo-item/TodoItem';
-import { todoItemTemplate } from '../todo-item/TodoItem.template';
-
-export const App = defineComponent({
-  name: "app",
-  refs: {
-    todoList: 'todoList',
-    todoItems: refComponents(TodoItem),
-    appHeader: refComponents(AppHeader),
-  },
-  setup({ refs}) {
-    const initialTodoItems = refs.todoItems.getComponents().map(({ props : { title, isCompleted } }) => ({ title, isCompleted }));
-    const todos = ref(initialTodoItems);
-
-    return [
-      bind(refs.appHeader, {
-        onCreate(newTodo) {
-          todos.value = todos.value.concat({title: newTodo, isCompleted: false});
-        }
-      }),
-      ...bindMap(refs.todoItems, (_, refIndex) => ({
-        ...todos.value[refIndex],
-        onChange(newProps) {
-          todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
-        }
-      })),
-      bindTemplate(
-        refs.todoList,
-        todos,
-        (items ) => items.map(itemData => todoItemTemplate(itemData)),
-      ),
-    ];
-  }
-});
-```
-
-</CodeGroupItem>
-</CodeGroup>
-
 With this in place, if we check our app again, we should be able to edit existing and add new todo items, without
 anything getting reverted to outdated information.
 
-## Deleting an item
+### Deleting an item
 
 Now that we can Add and Edit items, it's time for Deleting ones as well. For this to work, we need to add click
 bindings to our delete button, and add a `onDelete` prop we can call. Then our `App` we need to pass the `onDelete`,
 and remove our Todo from the list.
 
-In our `TodoIte` we add our `onDelete` prop:
-```ts
-onDelete: propType.func.optional.shape<() => void>(),
-```
+In our `TodoItem` we add our `onDelete` prop:
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
+
+@[code{16-16} ts](./steps/todo-mvc-client-todoitem-8.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 Then add our `click` binding:
-```ts
-bind(refs.destroyButton, {
-  click() {
-    props.onDelete?.();
-  }
-})
-```
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
+
+@[code{79-83} ts](./steps/todo-mvc-client-todoitem-8.ts)
+</CodeGroupItem>
+<CodeGroupItem title="Complete">
+
+@[code ts{16,79-83}](./steps/todo-mvc-client-todoitem-8.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 And lastly, in our `App` we handle the deletion by filtering the `todos` based on index.
-```ts
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
+
+@[code{28-37} ts{7-9}](./steps/todo-mvc-client-app-7.ts)
+</CodeGroupItem>
+<CodeGroupItem title="Complete">
+
+@[code ts{34-36}](./steps/todo-mvc-client-app-7.ts)
+</CodeGroupItem>
+</CodeGroup>
+```ts{5-7}
 ...bindMap(refs.todoItems, (_, refIndex) => ({
-   ...todos.value[refIndex],
    onChange(newProps) {
       todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
    },
@@ -1240,7 +758,7 @@ And lastly, in our `App` we handle the deletion by filtering the `todos` based o
 
 Now we should be able to delete items.
 
-## `AppFooter` - to manage our todos
+### `AppFooter` - to manage our todos
 
 Next up the `AppFooter`, where we:
 
@@ -1248,5 +766,5 @@ Next up the `AppFooter`, where we:
 2. can clear the completed todos from the list – easier than deleting them one by one
 3. filter our todos based on `isCompleted`
 
-### Uncompleted count
+#### Uncompleted count
 
