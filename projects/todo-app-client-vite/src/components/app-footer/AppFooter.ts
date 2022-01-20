@@ -14,25 +14,30 @@ export const AppFooter = defineComponent({
     onClearCompleted: propType.func.optional.shape<() => void>(),
     selectedFilter: propType.string.optional,
   },
-  setup({ refs , props}) {
+  setup({ refs, props }) {
     return [
       bind(refs.todoCount, {
-        html: computed(() => `<strong>${props.activeTodoCount}</strong> ${props.activeTodoCount === 1 ? 'items' : 'item'} left`)
+        html: computed(
+          () =>
+            `<strong>${props.activeTodoCount}</strong> ${
+              props.activeTodoCount === 1 ? 'items' : 'item'
+            } left`,
+        ),
       }),
       bind(refs.clearCompletedButton, {
         click() {
           props.onClearCompleted?.();
-        }
+        },
       }),
       bind(refs.filterAll, {
-        css: { selected: computed(() => props.selectedFilter === undefined)}
+        css: { selected: computed(() => props.selectedFilter === undefined) },
       }),
       bind(refs.filterActive, {
-        css: { selected: computed(() => props.selectedFilter === 'active')}
+        css: { selected: computed(() => props.selectedFilter === 'active') },
       }),
       bind(refs.filterCompleted, {
-        css: { selected: computed(() => props.selectedFilter === 'completed')}
-      })
+        css: { selected: computed(() => props.selectedFilter === 'completed') },
+      }),
     ];
-  }
-})
+  },
+});

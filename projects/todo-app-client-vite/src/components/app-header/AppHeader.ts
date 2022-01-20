@@ -6,7 +6,7 @@ export const AppHeader = defineComponent({
     newTodoInput: 'newTodoInput',
   },
   props: {
-    onCreate: propType.func.optional.shape<(value: string) => void>()
+    onCreate: propType.func.optional.shape<(value: string) => void>(),
   },
   setup({ refs, props }) {
     const inputValue = ref('');
@@ -19,9 +19,9 @@ export const AppHeader = defineComponent({
               props.onCreate?.(inputValue.value);
               inputValue.value = '';
             }
-          }
-        }
-      })
+          },
+        },
+      }),
     ];
-  }
-})
+  },
+});

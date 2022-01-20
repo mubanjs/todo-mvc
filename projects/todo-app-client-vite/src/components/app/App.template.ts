@@ -1,7 +1,9 @@
-import { ComponentTemplateResult, html } from '@muban/template';
+import type { ComponentTemplateResult } from '@muban/template';
+import { html } from '@muban/template';
 import { appFooterTemplate } from '../app-footer/AppFooter.template';
 import { appHeaderTemplate } from '../app-header/AppHeader.template';
-import { todoItemTemplate, TodoItemTemplateProps } from '../todo-item/TodoItem.template';
+import type { TodoItemTemplateProps } from '../todo-item/TodoItem.template';
+import { todoItemTemplate } from '../todo-item/TodoItem.template';
 
 export type AppTemplateProps = {
   title?: string;
@@ -13,14 +15,14 @@ export function appTemplate({ title, todos = [] }: AppTemplateProps = {}): Compo
     <div data-component="app">
       <section class="todoapp">
         ${appHeaderTemplate({ title })}
-        <section class="main">
+        <section data-ref="mainSection" class="main">
           <input data-ref="toggleAllInput" id="toggle-all" class="toggle-all" type="checkbox" />
           <label for="toggle-all">Mark all as complete</label>
           <ul data-ref="todoList" class="todo-list">
-            ${todos.map(todo => todoItemTemplate(todo))}
+            ${todos.map((todo) => todoItemTemplate(todo))}
           </ul>
         </section>
-        ${appFooterTemplate( { uncompletedCount: todos.filter(todo => !todo.isCompleted).length })}
+        ${appFooterTemplate({ uncompletedCount: todos.filter((todo) => !todo.isCompleted).length })}
       </section>
       <footer class="info">
         <p>Double-click to edit a todo</p>
