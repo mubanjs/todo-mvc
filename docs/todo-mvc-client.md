@@ -11,6 +11,15 @@ deal with these kinds of apps.
 Please remember that most templates here would normally exist on the server, except for the `TodoItem` template,
 since this will be rendered dynamically based on the available data.
 
+::: tip Code files
+If you want to quickly see the code for each step, you can find them
+[here](https://github.com/mubanjs/todo-mvc/tree/main/docs/steps).
+
+Or the final code version [here](https://github.com/mubanjs/todo-mvc/tree/main/projects/todo-app-client).
+
+Or the running example [here](https://mubanjs.github.io/todo-mvc/projects/todo-mvc-client/).
+:::
+
 ## Initial Setup
 
 In this example we're using `Vite` to develop the project, but you can use whatever developer setup you want.
@@ -60,9 +69,11 @@ Here we have done the following;
    attribute. Besides linking it to our logic, it can also be used to style our components (as apposed to classnames).
 5. We use our `title` prop in our html, as you would use any variable in a template string.
 
-> When rendering any template in Muban, think of it as the *initial state* of your application or component. Even
-> without executing any component initialisation, your templates should reflect what would be rendered on the server.
-> This means that your templates should not include any "interaction logic". The output should be a static string.
+::: tip Initial State
+When rendering any template in Muban, think of it as the *initial state* of your application or component. Even
+without executing any component initialisation, your templates should reflect what would be rendered on the server.
+This means that your templates should not include any "interaction logic". The output should be a static string.
+:::
 
 ### Component file
 
@@ -85,10 +96,16 @@ Here we have done the following:
    there, we'll add more things later.
 4. For now, we're adding a `console.log` to check if our component is correctly initialized.
 
-> A component is only initialized when there is an html element with the matching `data-component`attribute value
-> present in the DOM. Additionally, the `Component` file should be known in the "parent component", or globally
-> registered within the "application". In the parent component this can be done by using `refComponent` for the refs,
-> or otherwise using the `components` array. More on this later.
+::: tip Component Initialisation
+A component is only initialized when there is an html element with the matching `data-component`attribute value
+present in the DOM.
+
+Additionally, the `Component` file should be known in the "parent component", or globally 
+registered within the "application".
+
+In the parent component this can be done by using `refComponent` for the refs, or otherwise 
+using the `components` array. More on this later.
+:::
 
 ### Rendering the App
 
@@ -115,10 +132,12 @@ It does the following things:
 
 If we check the browser, we should see a `Todos` title, and `App Running..` in the devtools console.
 
-> Calling `mount` with a template + data is normally something we only do in development, or abusing muban to create
-> a client-side-rendered App. The strength of muban lies in working with existing HTML that is rendered on the server.
->
-> If you already have HTML on the page, you can leave out those two parameters.
+::: tip Development mode
+Calling `mount` with a template + data is normally something we only do in development, or abusing muban to create
+a client-side-rendered App. The strength of muban lies in working with existing HTML that is rendered on the server.
+
+If you already have HTML on the page, you can leave out the `template` and `data` arguments.
+:::
 
 
 ## The Todo MVC Templates and Styles
@@ -650,7 +669,12 @@ events whenever those values update. Then make sure to update our `App` componen
 The changes in `TodoItem` look like this:
 
 We add a `prop` to trigger changes.
+<CodeGroup>
+<CodeGroupItem title="src/components/todo-item/TodoItem.ts">
+
 @[code{14-15} ts:no-line-numbers](./steps/todo-mvc-client-todoitem-7.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 
 We **remove** the `refs` that stored the internal state:
@@ -746,16 +770,6 @@ And lastly, in our `App` we handle the deletion by filtering the `todos` based o
 @[code ts{34-36}](./steps/todo-mvc-client-app-7.ts)
 </CodeGroupItem>
 </CodeGroup>
-```ts{5-7}
-...bindMap(refs.todoItems, (_, refIndex) => ({
-   onChange(newProps) {
-      todos.value = todos.value.map((item, index) => index === refIndex ? ({...item, ...newProps}) : item)
-   },
-   onDelete() {
-      todos.value = todos.value.filter((_, index) => index !== refIndex)
-   }
-})),
-```
 
 Now we should be able to delete items.
 
