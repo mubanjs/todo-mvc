@@ -125,7 +125,8 @@ If we check the browser, we should see a `Todos` title, and `App Running..` in t
 
 To save some time (and for consistency) we're going to copy all the html and css from the Todo MVC template repo.
 
-The CSS can be found [here](TODO), and it can be copied over into your `src/style.css` file.
+The CSS can be found [here](https://github.com/mubanjs/todo-mvc/blob/main/projects/todo-app-client-vite/src/style.css),
+and it can be copied over into your `src/style.css` file.
 
 The HTML can be cut into 4 different templates:
 1. An individual `TodoItem`

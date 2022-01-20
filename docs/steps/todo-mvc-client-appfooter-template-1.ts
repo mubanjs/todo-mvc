@@ -23,16 +23,18 @@ export function appFooterTemplate({
             data-ref="filterActive"
             class="${selectedFilter === 'active' ? 'selected' : ''}"
             href="#/active"
-            >Active</a
           >
+            Active
+          </a>
         </li>
         <li>
           <a
             data-ref="filterCompleted"
             class="${selectedFilter === 'completed' ? 'selected' : ''}"
             href="#/completed"
-            >Completed</a
           >
+            Completed
+          </a>
         </li>
       </ul>
       <!-- Hidden if no completed items are left ↓ -->
