@@ -37,26 +37,19 @@ export const App = defineComponent({
       removeTodo,
       updateTodo,
       clearCompleted,
-      markAllTodosAs,
+      allDone,
     } = useTodos(initialTodoItems);
 
     watchEffect(() => {
       localStorage.setItem('MUBAN_TODO_MVC_LIST', JSON.stringify(todos.value));
     });
 
-    const areAllCompleted = computed(() => activeTodoCount.value === 0);
-
     return [
       bind(refs.appHeader, {
         onCreate: addTodo,
       }),
       bind(refs.toggleAllInput, {
-        checked: areAllCompleted,
-        event: {
-          change() {
-            markAllTodosAs(!areAllCompleted.value);
-          },
-        },
+        checked: allDone,
       }),
       bind(refs.mainSection, {
         style: {

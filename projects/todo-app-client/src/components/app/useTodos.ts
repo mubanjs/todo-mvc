@@ -28,23 +28,25 @@ export function useTodos(initialTodoItems: Array<TodoItemTemplateProps>) {
     );
   });
 
-  const activeTodoCount = computed(() => todos.value.filter((todo) => !todo.isCompleted).length);
+  const remainingTodoCount = computed(() => todos.value.filter((todo) => !todo.isCompleted).length);
 
   const addTodo = (title: string) => {
     const sanitizedTitle = title.trim();
-    if (sanitizedTitle.length > 0) {
+    if (sanitizedTitle !== '') {
       todos.value = todos.value.concat({ title: sanitizedTitle, isCompleted: false, id: nanoid() });
     }
   };
+
   const removeTodo = (id: string) => {
     todos.value = todos.value.filter((item) => item.id !== id);
   };
+
   const updateTodo = (id: string, newValues: Partial<TodoItemTemplateProps>) => {
     let newItem = newValues;
     if (newValues.title !== undefined) {
       const sanitizedTitle = newValues.title.trim();
       // if an empty title would be set, remove the item
-      if (sanitizedTitle.length === 0) {
+      if (sanitizedTitle === '') {
         removeTodo(id);
         return;
       }
@@ -53,26 +55,32 @@ export function useTodos(initialTodoItems: Array<TodoItemTemplateProps>) {
     }
     todos.value = todos.value.map((item) => (item.id === id ? { ...item, ...newItem } : item));
   };
+
   const clearCompleted = () => {
     todos.value = todos.value.filter((todo) => !todo.isCompleted);
   };
 
-  const markAllTodosAs = (isCompleted: boolean) => {
-    todos.value = todos.value.map((todo) => ({
-      ...todo,
-      isCompleted,
-    }));
-  };
+  const allDone = computed({
+    get() {
+      return remainingTodoCount.value === 0;
+    },
+    set(isCompleted: boolean) {
+      todos.value = todos.value.map((todo) => ({
+        ...todo,
+        isCompleted,
+      }));
+    },
+  });
 
   return {
     todos,
     filteredTodos,
     selectedFilter,
-    activeTodoCount,
+    activeTodoCount: remainingTodoCount,
     addTodo,
     removeTodo,
     updateTodo,
     clearCompleted,
-    markAllTodosAs,
+    allDone,
   };
 }

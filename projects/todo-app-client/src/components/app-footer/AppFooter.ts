@@ -20,7 +20,7 @@ export const AppFooter = defineComponent({
         html: computed(
           () =>
             `<strong>${props.activeTodoCount}</strong> ${
-              props.activeTodoCount === 1 ? 'items' : 'item'
+              props.activeTodoCount === 1 ? 'item' : 'items'
             } left`,
         ),
       }),

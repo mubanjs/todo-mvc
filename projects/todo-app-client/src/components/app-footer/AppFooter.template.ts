@@ -13,7 +13,7 @@ export function appFooterTemplate({
   return html`
     <footer data-component="app-footer" class="footer">
       <span data-ref="todoCount" class="todo-count">
-        <strong>${uncompletedCount}</strong> ${uncompletedCount === 1 ? 'items' : 'item'} left
+        <strong>${uncompletedCount}</strong> ${uncompletedCount === 1 ? 'item' : 'items'} left
       </span>
       <ul class="filters">
         <li>

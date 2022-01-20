@@ -3,7 +3,7 @@ import { bind, computed, defineComponent, propType, ref, refElement } from '@mub
 export const TodoItem = defineComponent({
   name: 'todo-item',
   refs: {
-    completedInput: refElement<HTMLInputElement>('completedInput'),
+    completedInput: 'completedInput',
     title: 'title',
     destroyButton: 'destroyButton',
     editInput: refElement<HTMLInputElement>('editInput'),
@@ -42,14 +42,14 @@ export const TodoItem = defineComponent({
         },
       }),
       bind(refs.completedInput, {
-        checked: computed(() => props.isCompleted),
-        event: {
-          change() {
+        checked: computed({
+          get: () => props.isCompleted,
+          set(value) {
             props.onChange?.(props.id, {
-              isCompleted: Boolean(refs.completedInput.element?.checked),
+              isCompleted: value,
             });
           },
-        },
+        }),
       }),
       bind(refs.title, {
         event: {
