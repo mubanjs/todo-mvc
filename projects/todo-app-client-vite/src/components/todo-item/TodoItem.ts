@@ -9,10 +9,11 @@ export const TodoItem = defineComponent({
     editInput: refElement<HTMLInputElement>('editInput'),
   },
   props: {
+    id: propType.string,
     title: propType.string.source({ type: 'text', target: 'title' }),
     isCompleted: propType.boolean.source({ type: 'css', name: 'completed' }),
-    onChange: propType.func.optional.shape<(data: { title?: string; isCompleted?: boolean }) => void>(),
-    onDelete: propType.func.optional.shape<() => void>(),
+    onChange: propType.func.optional.shape<(id: string, data: { title?: string; isCompleted?: boolean }) => void>(),
+    onDelete: propType.func.optional.shape<(id: string) => void>(),
   },
   setup({ props, refs}) {
     const isEditing = ref(false);
@@ -22,7 +23,7 @@ export const TodoItem = defineComponent({
     const exitEditing = (saveValue = false) => {
       // either save the value, or restore it to the previous state
       if (saveValue) {
-        props.onChange?.({ title: editValue.value });
+        props.onChange?.(props.id, { title: editValue.value });
       } else {
         editValue.value = props.title;
       }
@@ -41,7 +42,7 @@ export const TodoItem = defineComponent({
         checked: computed(() => props.isCompleted),
         event: {
           change() {
-            props.onChange?.({ isCompleted: Boolean(refs.completedInput.element?.checked) });
+            props.onChange?.(props.id, { isCompleted: Boolean(refs.completedInput.element?.checked) });
           }
         }
       }),
@@ -75,7 +76,7 @@ export const TodoItem = defineComponent({
       }),
       bind(refs.destroyButton, {
         click() {
-          props.onDelete?.();
+          props.onDelete?.(props.id);
         }
       })
     ];

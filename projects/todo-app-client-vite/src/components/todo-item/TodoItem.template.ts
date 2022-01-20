@@ -1,13 +1,14 @@
 import { html } from '@muban/template';
 
 export type TodoItemTemplateProps = {
+  id: string;
   isCompleted: boolean;
   title: string;
 }
 
-export function todoItemTemplate({ isCompleted, title}: TodoItemTemplateProps) {
+export function todoItemTemplate({ isCompleted, title, id}: TodoItemTemplateProps) {
   // there is also an `editing` class, but that's only set when interacting with the element
-  return html`<li data-component="todo-item" class="${isCompleted ? 'completed' : ''}">
+  return html`<li data-component="todo-item" data-id=${id} class="${isCompleted ? 'completed' : ''}">
     <div class="view">
       <input data-ref="completedInput" class="toggle" type="checkbox" checked=${isCompleted} />
       <label data-ref="title">${title}</label>

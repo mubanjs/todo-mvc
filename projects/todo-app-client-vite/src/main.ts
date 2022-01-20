@@ -10,13 +10,15 @@ const app = createApp(App);
 app.mount(appRoot, appTemplate, {
   title: 'Todos',
   todos: [
-    {
-      title: 'Taste JavaScript',
-      isCompleted: true,
-    },
-    {
-      title: 'Buy a unicorn',
-      isCompleted: false,
-    }
+    // {
+    //   id: nanoid(),
+    //   title: 'Taste JavaScript',
+    //   isCompleted: true,
+    // },
+    // {
+    //   id: nanoid(),
+    //   title: 'Buy a unicorn',
+    //   isCompleted: false,
+    // }
   ]
 });
