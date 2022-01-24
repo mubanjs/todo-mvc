@@ -1,10 +1,13 @@
+import type { ComponentTemplateResult } from '@muban/template';
 import { html } from '@muban/template';
 
 export type AppHeaderTemplateProps = {
   title?: string;
 };
 
-export function appHeaderTemplate({ title = 'Todos' }: AppHeaderTemplateProps = {}) {
+export function appHeaderTemplate({
+  title = 'Todos',
+}: AppHeaderTemplateProps = {}): ComponentTemplateResult {
   return html`<div data-component="app-header" class="header">
     <h1>${title}</h1>
     <input

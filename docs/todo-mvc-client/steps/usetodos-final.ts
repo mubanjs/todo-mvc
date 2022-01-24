@@ -15,6 +15,7 @@ function getFilterFromUrl(): 'active' | 'completed' | undefined {
 export function useTodos(initialTodoItems: Array<TodoItemTemplateProps>) {
   const todos = ref(initialTodoItems);
   const selectedFilter = ref<'active' | 'completed' | undefined>(getFilterFromUrl());
+
   useEventListener(window, 'popstate', () => {
     selectedFilter.value = getFilterFromUrl();
   });

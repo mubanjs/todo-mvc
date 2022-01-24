@@ -12,7 +12,7 @@ export function appFooterTemplate({
 }: AppFooterTemplateProps = {}): ComponentTemplateResult {
   return html`
     <footer data-component="app-footer" class="footer">
-      <span data-ref="todoCount" class="todo-count">
+      <span data-ref="remainingCount" class="todo-count">
         <strong>${uncompletedCount}</strong> ${uncompletedCount === 1 ? 'item' : 'items'} left
       </span>
       <ul class="filters">
@@ -24,16 +24,18 @@ export function appFooterTemplate({
             data-ref="filterActive"
             class="${selectedFilter === 'active' ? 'selected' : ''}"
             href="#/active"
-            >Active</a
           >
+            Active
+          </a>
         </li>
         <li>
           <a
             data-ref="filterCompleted"
             class="${selectedFilter === 'completed' ? 'selected' : ''}"
             href="#/completed"
-            >Completed</a
           >
+            Completed
+          </a>
         </li>
       </ul>
       <!-- Hidden if no completed items are left ↓ -->

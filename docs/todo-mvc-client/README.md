@@ -19,3 +19,17 @@ Or the final code version [here](https://github.com/mubanjs/todo-mvc/tree/main/p
 
 Or the running example [here](https://mubanjs.github.io/todo-mvc/projects/todo-mvc-client/).
 :::
+
+In this tutorial you will learn:
+
+1. How two write (dev) `templates`
+2. How to write `components`
+3. How components **interact** with each other (parent `<>` child)
+4. How to use `refs`
+5. How to use `props`
+6. How to set up basic `bindings`
+7. How to set up **two-way** `bindings`
+8. How to use `bindTemplate`
+9. How to use `bindMap`
+10. How to use **writable** `computed`
+11. How to create and use **hooks**

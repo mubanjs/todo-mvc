@@ -64,7 +64,7 @@ Create a `src/components/app-header/AppHeader.template.ts` with the following co
 <CodeGroup>
 <CodeGroupItem title="src/components/app-header/AppHeader.template.ts">
 
-@[code ts{8,9,11}](./steps/appheader-template-1.ts)
+@[code ts{11,12,14}](./steps/appheader-template-1.ts)
 
 </CodeGroupItem>
 </CodeGroup>

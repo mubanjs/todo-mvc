@@ -1,4 +1,11 @@
-import { bind, bindTemplate, defineComponent, ref, refComponents } from '@muban/muban';
+import {
+  bind,
+  bindTemplate,
+  defineComponent,
+  ref,
+  refComponent,
+  refComponents,
+} from '@muban/muban';
 import { AppHeader } from '../app-header/AppHeader';
 import { TodoItem } from '../todo-item/TodoItem';
 import { todoItemTemplate } from '../todo-item/TodoItem.template';
@@ -6,9 +13,9 @@ import { todoItemTemplate } from '../todo-item/TodoItem.template';
 export const App = defineComponent({
   name: 'app',
   refs: {
+    appHeader: refComponent(AppHeader),
     todoList: 'todoList',
     todoItems: refComponents(TodoItem),
-    appHeader: refComponents(AppHeader),
   },
   setup({ refs }) {
     const initialTodoItems = refs.todoItems
@@ -23,7 +30,7 @@ export const App = defineComponent({
         },
       }),
       bindTemplate(refs.todoList, todos, (items) =>
-        items.map((itemData) => todoItemTemplate(itemData)),
+        items.map((itemData) => todoItemTemplate(itemData)).join(''),
       ),
     ];
   },

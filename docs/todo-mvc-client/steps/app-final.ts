@@ -25,7 +25,6 @@ export const App = defineComponent({
     appFooter: refComponent(AppFooter),
   },
   setup({ refs }) {
-    // const initialTodoItems = refs.todoItems.getComponents().map(({ props : { id, title, isCompleted } }) => ({ id, title, isCompleted }));
     const initialTodoItems = JSON.parse(localStorage.getItem('MUBAN_TODO_MVC_LIST') ?? '[]') || [];
 
     const {
@@ -56,11 +55,8 @@ export const App = defineComponent({
           display: computed(() => (todos.value.length === 0 ? 'none' : 'block')),
         },
       }),
-      bindTemplate(
-        refs.todoList,
-        filteredTodos,
-        (items) => items.map((itemData) => todoItemTemplate(itemData)).join(''),
-        { renderImmediate: true },
+      bindTemplate(refs.todoList, filteredTodos, (items) =>
+        items.map((itemData) => todoItemTemplate(itemData)).join(''),
       ),
       bind(refs.todoItems, {
         onChange: updateTodo,

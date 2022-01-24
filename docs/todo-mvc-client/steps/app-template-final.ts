@@ -15,7 +15,7 @@ export function appTemplate({ title, todos = [] }: AppTemplateProps = {}): Compo
     <div data-component="app">
       <section class="todoapp">
         ${appHeaderTemplate({ title })}
-        <section class="main">
+        <section data-ref="mainSection" class="main">
           <input data-ref="toggleAllInput" id="toggle-all" class="toggle-all" type="checkbox" />
           <label for="toggle-all">Mark all as complete</label>
           <ul data-ref="todoList" class="todo-list">

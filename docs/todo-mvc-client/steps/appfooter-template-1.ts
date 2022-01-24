@@ -1,3 +1,4 @@
+import type { ComponentTemplateResult } from '@muban/template';
 import { html } from '@muban/template';
 
 type AppFooterTemplateProps = {
@@ -8,10 +9,10 @@ type AppFooterTemplateProps = {
 export function appFooterTemplate({
   uncompletedCount = 0,
   selectedFilter,
-}: AppFooterTemplateProps = {}) {
+}: AppFooterTemplateProps = {}): ComponentTemplateResult {
   return html`
     <footer data-component="app-footer" class="footer">
-      <span data-ref="todoCount" class="todo-count">
+      <span data-ref="remainingCount" class="todo-count">
         <strong>${uncompletedCount}</strong> ${uncompletedCount === 1 ? 'item' : 'items'} left
       </span>
       <ul class="filters">

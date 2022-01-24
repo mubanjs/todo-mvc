@@ -21,6 +21,7 @@ export default defineUserConfig<DefaultThemeOptions>({
         'todo-mvc-client-1',
         'todo-mvc-client-2',
         'todo-mvc-client-3',
+        'todo-mvc-client-4',
       ],
     },
   },

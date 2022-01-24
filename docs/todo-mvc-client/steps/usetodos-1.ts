@@ -3,30 +3,9 @@ import { computed, ref } from '@muban/muban';
 import { nanoid } from 'nanoid';
 import type { TodoItemTemplateProps } from '../todo-item/TodoItem.template';
 
-function getFilterFromUrl(): 'active' | 'completed' | undefined {
-  const [, filter] = document.location.hash.split('/');
-  if (filter === 'active' || filter === 'completed') {
-    return filter;
-  }
-  return undefined;
-}
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function useTodos(initialTodoItems: Array<TodoItemTemplateProps>) {
   const todos = ref(initialTodoItems);
-  const selectedFilter = ref<'active' | 'completed' | undefined>(getFilterFromUrl());
-  useEventListener(window, 'popstate', () => {
-    selectedFilter.value = getFilterFromUrl();
-  });
-
-  const filteredTodos = computed(() => {
-    if (selectedFilter.value === undefined) {
-      return todos.value;
-    }
-    return todos.value.filter(
-      (todo) => todo.isCompleted === (selectedFilter.value === 'completed'),
-    );
-  });
 
   const remainingTodoCount = computed(() => todos.value.filter((todo) => !todo.isCompleted).length);
 
@@ -74,8 +53,6 @@ export function useTodos(initialTodoItems: Array<TodoItemTemplateProps>) {
 
   return {
     todos,
-    filteredTodos,
-    selectedFilter,
     remainingTodoCount,
     addTodo,
     removeTodo,

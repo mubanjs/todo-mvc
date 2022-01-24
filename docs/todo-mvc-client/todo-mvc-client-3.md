@@ -344,7 +344,7 @@ Our `App` component now looks like this:
 <CodeGroup>
 <CodeGroupItem title="src/components/app/App.ts">
 
-@[code ts{11,20-24}](./steps/app-5.ts)
+@[code ts{16,27-31}](./steps/app-5.ts)
 </CodeGroupItem>
 </CodeGroup>
 
@@ -411,11 +411,11 @@ Then to sync everything up, we add this new binding to our `App`:
 <CodeGroup>
 <CodeGroupItem title="src/components/app/App.ts">
 
-@[code{28-34} ts](./steps/app-6.ts)
+@[code{36-42} ts](./steps/app-6.ts)
 </CodeGroupItem>
 <CodeGroupItem title="Complete">
 
-@[code ts{28-34}](./steps/app-6.ts)
+@[code ts{36-42}](./steps/app-6.ts)
 </CodeGroupItem>
 </CodeGroup>
 
@@ -462,11 +462,11 @@ And lastly, in our `App` we handle the deletion by filtering the `todos` based o
 <CodeGroup>
 <CodeGroupItem title="src/components/app/App.ts">
 
-@[code{28-37} ts{7-9}](./steps/app-7.ts)
+@[code{36-45} ts{7-9}](./steps/app-7.ts)
 </CodeGroupItem>
 <CodeGroupItem title="Complete">
 
-@[code ts{34-36}](./steps/app-7.ts)
+@[code ts{42-44}](./steps/app-7.ts)
 </CodeGroupItem>
 </CodeGroup>
 
@@ -480,7 +480,90 @@ Next up the `AppFooter`, where we:
 2. can clear the completed todos from the list – easier than deleting them one by one
 3. filter our todos based on `isCompleted`
 
+First, create our empty component:
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app-footer/AppFooter.ts">
+
+@[code ts](./steps/appfooter-1.ts)
+</CodeGroupItem>
+</CodeGroup>
+
 ### Remaining count
+
+We can now add all our refs to the component, including the `remainingCount`, so we can update it.
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app-footer/AppFooter.ts">
+
+@[code{5-11} ts{2}](./steps/appfooter-2.ts)
+</CodeGroupItem>
+</CodeGroup>
+
+And our props, including the `remainingCount` we will receive from the parent component.
+We are not going to try to extract it from the HTML, but instead set it to `0` as default, since 
+everything will client-rendered (and we only receive this information from the parent).
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app-footer/AppFooter.ts">
+
+@[code{12-15} ts{2}](./steps/appfooter-2.ts)
+</CodeGroupItem>
+</CodeGroup>
+
+Then, we add the binding, to update the DOM whenever the prop changes.
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app-footer/AppFooter.ts">
+
+@[code{18-25} ts](./steps/appfooter-2.ts)
+</CodeGroupItem>
+</CodeGroup>
 
 ### Clear Completed
 
+We already added our refs and props in the previous step, so we only have to add the `click` 
+binding to `refs.clearCompletedButton` to call the `onClearCompleted` prop.
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app-footer/AppFooter.ts">
+
+@[code{26-30} ts](./steps/appfooter-2.ts)
+</CodeGroupItem>
+<CodeGroupItem title="Complete">
+
+@[code ts{6-7,13-14,18-30}](./steps/appfooter-2.ts)
+</CodeGroupItem>
+</CodeGroup>
+
+### Connect to parent
+
+To initialize the `AppFooter` component, and connect the bindings, we have to add it to the 
+`refs` in the `App` component.
+
+@[code{22-22} ts](./steps/app-8.ts)
+
+And then add the `bindings`.
+
+For the `remainingTodoCount` we filter our `todos` to count everything that `isCompleted`.
+
+And when `onClearCompleted` is called, we filter to only keep items that were not `isCompleted`.
+
+<CodeGroup>
+<CodeGroupItem title="src/components/app/App.ts">
+
+@[code{49-54} ts](./steps/app-8.ts)
+</CodeGroupItem>
+<CodeGroupItem title="Complete">
+
+@[code ts{22,49-54}](./steps/app-8.ts)
+</CodeGroupItem>
+</CodeGroup>
+
+At this point you should see the counter in the footer update whenever you add, remove or (un)
+complete todo items, and you should be able to use the "Clear Completed" button to remove 
+everything that was checked off.
+
+The **Filtering** is going to require quite some changes across the board, where we require some 
+kind of "router", are going to include saving to localStorage, and add an `id` to our todo items 
+to make things a bit easier.

@@ -1,3 +1,4 @@
+import type { ComponentTemplateResult } from '@muban/template';
 import { html } from '@muban/template';
 
 export type TodoItemTemplateProps = {
@@ -5,7 +6,10 @@ export type TodoItemTemplateProps = {
   isCompleted: boolean;
 };
 
-export function todoItemTemplate({ title, isCompleted }: TodoItemTemplateProps) {
+export function todoItemTemplate({
+  title,
+  isCompleted,
+}: TodoItemTemplateProps): ComponentTemplateResult {
   // there is also an `editing` class, but that's only set when interacting with the element
   return html`<li data-component="todo-item" class="${isCompleted ? 'completed' : ''}">
     <div class="view">
