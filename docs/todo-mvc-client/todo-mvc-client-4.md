@@ -63,14 +63,14 @@ have to use `bindMap` for our `refs.todoItems` anymore, making this a lot simple
 </CodeGroupItem>
 </CodeGroup>
 
-As part of this big refactor, we have moved most code to a separate file called `useTodos.ts`. 
-However, if you want to follow along with just this step, you can place these functions in the 
+As part of a big refactor, we will move most code to a separate file called `useTodos.ts.`. 
+However, if you want to follow along with just this step, you can place these functions in the
 `App.ts` as well, since they only operate on the `todos` ref.
 
 <CodeGroup>
-<CodeGroupItem title="src/components/app/useTodos.ts">
+<CodeGroupItem title="src/components/app/App.ts">
 
-@[code{33-57} ts{4,8-9,12,18,24}](./steps/usetodos-final.ts)
+@[code{33-58} ts{4,8-9,12,18,24}](./steps/usetodos-final.ts)
 </CodeGroupItem>
 </CodeGroup>
 
@@ -105,7 +105,7 @@ Create a `src/components/app/useTodos.ts` file and add in the following code:
 <CodeGroup>
 <CodeGroupItem title="src/components/app/useTodos.ts">
 
-@[code ts{8,10,12,19,23,38,42,44,54-62}](./steps/usetodos-1.ts)
+@[code ts{7,9,11,18,22,37,41,43,53-61}](./steps/usetodos-1.ts)
 </CodeGroupItem>
 </CodeGroup>
 

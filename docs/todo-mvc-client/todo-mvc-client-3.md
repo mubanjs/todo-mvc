@@ -324,10 +324,10 @@ To get access to the new Todo, we need to pass our `onCreate` function to the `A
 
 We start by adding this as a `refComponent`, so we can bind to it. We can now also remove the `components` array
 completely.
-@[code{11-11} ts:no-line-numbers](./steps/app-5.ts)
+@[code{16-16} ts:no-line-numbers](./steps/app-5.ts)
 
 Next, we add our binding;
-@[code{20-24} ts:no-line-numbers](./steps/app-5.ts)
+@[code{27-31} ts:no-line-numbers](./steps/app-5.ts)
 
 
 Here we pass the `onCreate` function to our `appHeader` component, so when you submit a new one, this function is
@@ -510,6 +510,9 @@ everything will client-rendered (and we only receive this information from the p
 @[code{12-15} ts{2}](./steps/appfooter-2.ts)
 </CodeGroupItem>
 </CodeGroup>
+
+Don't forget to add the `refs` and `props` to the setup function, so we can use them:
+@[code{16-16} ts](./steps/appfooter-2.ts)
 
 Then, we add the binding, to update the DOM whenever the prop changes.
 

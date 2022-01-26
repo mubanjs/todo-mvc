@@ -1,4 +1,3 @@
-import { useEventListener } from '@muban/hooks';
 import { computed, ref } from '@muban/muban';
 import { nanoid } from 'nanoid';
 import type { TodoItemTemplateProps } from '../todo-item/TodoItem.template';
