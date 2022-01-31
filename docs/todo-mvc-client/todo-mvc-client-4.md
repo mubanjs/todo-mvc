@@ -53,7 +53,7 @@ The places where we call those functions, we provide the `props.id` as a first p
 </CodeGroupItem>
 </CodeGroup>
 
-Now that we don't longer need to use indexes to find the todo item to update/remove, we don't 
+Now that we no longer need to use indices to find the todo item to update/remove, we don't 
 have to use `bindMap` for our `refs.todoItems` anymore, making this a lot simpler: 
 
 <CodeGroup>
