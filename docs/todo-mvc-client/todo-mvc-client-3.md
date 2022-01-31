@@ -152,7 +152,7 @@ We are also focussing the edit input – but with a small delay to give the DOM 
 Note that to let typescript understand we can do `element?.focus()` we have now typed our input ref as
 `editInput: refElement<HTMLInputElement>('editInput'),`.
 
-And we created an `editValue` ref, initialising it the extracted value from the `props`, and use that for the `textInput`
+And we created an `editValue` ref, initialising it to the extracted value from the `props`, and use that for the `textInput`
 binding on your `refs.editInput` – which set the initial value correctly, but will also change the `ref` when updating
 the input.
 
