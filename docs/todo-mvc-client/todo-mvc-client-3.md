@@ -66,7 +66,7 @@ default value, what type it should be converted to, etc.
 We want to extract the `title` prop from the `title` ref, so we specify that as `target` – the element (ref) we want
 to extract it from. Since we want the inner text of the `<label>`, we use the `text` type.
 
-For the `isComleted`, we want know if the `completed` class was set on the component root element. Since it's the
+For the `isCompleted`, we want know if the `completed` class was set on the component root element. Since it's the
 root, we don't have to specify a `target`. The `type` is set to `css` since we want to check the css class name, and
 `name` is `completed`, because we want to check for that value. If it's present, the result will be `true` –
 otherwise it's `false`.
