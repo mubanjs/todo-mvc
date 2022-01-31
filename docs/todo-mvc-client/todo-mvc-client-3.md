@@ -54,7 +54,7 @@ Next up are the props;
 </CodeGroup>
 
 Instead of (only) receiving props from our parent components, in most cases we extract props from the HTML. Here
-want to extract the `title` of the do, and if it's `isCompleted` or not.
+want to extract the `title` and `isCompleted` props.
 
 Same as with refs, the keys of the `props` object is what we will use in the `setup` function, and the value is the
 "prop definition". Here we use the `propType` helper to define what we want to extract, where from, if it has a
