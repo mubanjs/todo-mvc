@@ -434,7 +434,7 @@ anything getting reverted to outdated information.
 
 ## Deleting a Todo
 
-Now that we can Add and Edit items, it's time for Deleting ones as well. For this to work, we need to add click
+Now that we can Add and Edit todos, it should also be possible for us to Delete them. For this to work, we need to add click
 bindings to our delete button, and add a `onDelete` prop we can call. Then our `App` we need to pass the `onDelete`,
 and remove our Todo from the list.
 
