@@ -78,8 +78,8 @@ Here we have done the following:
 A component is only initialized when there is an html element with the matching `data-component`attribute value
 present in the DOM.
 
-Additionally, the `Component` file should be known in the "parent component", or globally 
-registered within the "application".
+Additionally, the `Component` file should be registered to a "parent component", or globally 
+to the Muban "application".
 
 In the parent component this can be done by using `refComponent` for the refs, or otherwise 
 using the `components` array. More on this later.
