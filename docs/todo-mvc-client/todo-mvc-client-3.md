@@ -72,7 +72,7 @@ root, we don't have to specify a `target`. The `type` is set to `css` since we w
 otherwise it's `false`.
 
 Just as with the refs, we expect these values to always be there. Otherwise we could have configured the props as
-`.optional` – where they become undefined when not present – or `.defaultValue('foo') to receive that value when
+`.optional` – where they become undefined when not present – or `.defaultValue('foo')` to receive that value when
 missing.
 
 ### Setup
