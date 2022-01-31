@@ -101,14 +101,14 @@ In the `main.ts` (that was created by Vite), change the code to this:
 
 It does the following things:
 
-1. Import `createApp`, to, well, create our Application.
+1. Import `createApp`, for creating our Muban Application.
 2. Import our component and template files.
-3. Query the root element of our application
+3. Query the root element of our application.
 4. Call `createApp` by passing our `App` component, which returns the `app` instance.
 5. `mount` our application in the `appRoot`, passing the `appTemplate` to render the HTML, passing the `title` prop
    to pass to the template.
 
-If we check the browser, we should see a `Todos` title, and `App Running..` in the devtools console.
+If we check the browser, we should see a `Todos` title, and `App Running...` in the devtools console.
 
 ::: tip Development mode
 Calling `mount` with a template + data is normally something we only do in development, or abusing muban to create
