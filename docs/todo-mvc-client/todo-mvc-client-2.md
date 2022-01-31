@@ -69,7 +69,7 @@ Create a `src/components/app-header/AppHeader.template.ts` with the following co
 </CodeGroupItem>
 </CodeGroup>
 
-This template is similar to what we had before in the `App` template (the `title`). It also has a input to enter new
+This template is similar to what we had before in the `App` template (the `title`). It also has an input for adding new
 todos.
 
 What we have done here is;
