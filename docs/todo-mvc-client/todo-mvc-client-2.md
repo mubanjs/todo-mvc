@@ -6,7 +6,7 @@ The CSS can be found [here](https://github.com/mubanjs/todo-mvc/blob/main/projec
 and it can be copied over into your `src/style.css` file.
 
 The HTML can be cut into 4 different templates:
-1. An individual `TodoItem`
+1. An individual `TodoItem`.
 2. The `AppHeader` section, with an input for new todos.
 3. The `AppFooter` sections, which shows some information, and allows you to filter todos by state.
 4. The `App` component itself, which is responsible for rendering the `TodoItem` components, and connect with the
