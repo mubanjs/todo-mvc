@@ -113,7 +113,7 @@ This code does the following:
 
 1. It creates the `todo` ref to contain all the data, based on the `initialTodoItems` passed to 
    the function.
-2. It created a `remainingTodoCount` computed, to be used in our component later.
+2. It creates a `remainingTodoCount` computed, to be used in our component later.
 3. It creates 4 functions that operate on our todos (add, remove, update, clear).
 4. It creates the `allDone` computed, used by the `toggleAll` (making use of the 
    `remainingTodoCount` computed)
