@@ -22,7 +22,7 @@ Or the running example [here](https://mubanjs.github.io/todo-mvc/projects/todo-m
 
 In this tutorial you will learn:
 
-1. How two write (dev) `templates`
+1. How to write (dev) `templates`
 2. How to write `components`
 3. How components **interact** with each other (parent `<>` child)
 4. How to use `refs`
