@@ -305,7 +305,7 @@ In order to use this extracted data to render our Todo items (and later add or r
 4. Whenever `todos` changes, our 3rd parameter – a template function – is executed. We use it to render our
    `todoItemTemplate` with the passed data, and return the mapped result. This will then replace the `innerHTML` of
    the `<ul>` container we bind to.
-5. `bindTemplate` will also make sure that whenever the HTML is update, it initializes all new components.
+5. `bindTemplate` will also make sure that whenever the HTML is updated, it initializes all new components.
 
 In total, our code should now look like this;
 
