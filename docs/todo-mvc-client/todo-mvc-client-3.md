@@ -426,8 +426,8 @@ For each item in the collection it executes the callback function, where we rece
 component, and the index in the list.
 
 Whenever `onChange` is called, we map over our todo list, and update the changed item based on index. The newly
-mapped array is assigned back to `todos.value`, which will make sure that whenever the `bindTemplate` is updating
-later, it passes the update values to each item.
+mapped array is assigned back to `todos.value`, which will make sure that whenever the `bindTemplate` is updated
+later, it passes the updated values to each item.
 
 With this in place, if we check our app again, we should be able to edit existing and add new todo items, without
 anything getting reverted to outdated information.
