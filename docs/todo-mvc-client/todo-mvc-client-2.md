@@ -125,7 +125,7 @@ Update our `src/components/app/App.template.ts` to the following;
 </CodeGroup>
 
 This is where everything comes together. Keep in mind that we're still just rendering templates, the "initial state"
-or our application, that is normally rendered on the server.
+of our application, that is normally rendered on the server.
 
 From the `main.ts` (that renders our component when mounting) we expect to receive the title, and a list of todo
 items (that are known on the server). We re-use the `TodoItemTemplateProps` type here to specify which fields each
