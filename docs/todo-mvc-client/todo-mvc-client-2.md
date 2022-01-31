@@ -49,7 +49,7 @@ after interacting with the application later.
 > Anything that doesn't have a `data-ref` attribute will stay as rendered.
 
 The two properties that we passed to the template (`{ title, isCompleted }`) are not automatically available in JS
-when we create our Component. We might not even always need them. in this case we do, so we need to think about how
+when we create our Component. We might not even always need them. In this case we do, so we need to think about how
 the Component is going to get access to them later.
 
 For the `title`, we can easily read the `textContent` of the `<label>` tag, so as long as that element has a
