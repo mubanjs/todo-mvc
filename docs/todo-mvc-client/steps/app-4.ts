@@ -18,7 +18,7 @@ export const App = defineComponent({
 
     return [
       bindTemplate(refs.todoList, todos, (items) =>
-        items.map((itemData) => todoItemTemplate(itemData)),
+        items.map((itemData) => todoItemTemplate(itemData)).join(''),
       ),
     ];
   },
