@@ -502,7 +502,7 @@ We can now add all our refs to the component, including the `remainingCount`, so
 
 And our props, including the `remainingCount` we will receive from the parent component.
 We are not going to try to extract it from the HTML, but instead set it to `0` as default, since 
-everything will client-rendered (and we only receive this information from the parent).
+everything is client-rendered (and we only receive this information from the parent).
 
 <CodeGroup>
 <CodeGroupItem title="src/components/app-footer/AppFooter.ts">
