@@ -24,8 +24,8 @@ Create a `src/components/todo-item/TodoItem.template.ts` with the following cont
 </CodeGroupItem>
 </CodeGroup>
 
-This template has two properties, the `title`, and `isCompleted`  to indicate it's done. From a "data" point of view,
-this is all we know about the item. This is all the information we are going to save into `LocalStorage` later.
+This template has two properties: `title`, the title of each todo, and `isCompleted`, an indicator for when an item has been completed.
+Data wise, this is all we know about the item, and what we are later going to save into `LocalStorage`.
 
 > It does have an `editing` state, but that is all handled by the Component if users interact with it. The "initial
 state" can never be "editing".
