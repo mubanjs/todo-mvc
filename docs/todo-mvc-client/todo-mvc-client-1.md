@@ -81,13 +81,13 @@ present in the DOM.
 Additionally, the `Component` file should be registered to a "parent component", or globally 
 to the Muban "application".
 
-In the parent component this can be done by using `refComponent` for the refs, or otherwise 
+In the parent component this can be done by using `refComponent` for the refs, or 
 using the `components` array. More on this later.
 :::
 
 ## Rendering the App
 
-Now that we have our first components (a template and logic file), it's time to render it by mounting our Application.
+Now that we have our first component (a template and logic file), it's time to render it by mounting our Application.
 
 In the `main.ts` (that was created by Vite), change the code to this:
 
