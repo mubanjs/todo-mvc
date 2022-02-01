@@ -78,16 +78,16 @@ Here we have done the following:
 A component is only initialized when there is an html element with the matching `data-component`attribute value
 present in the DOM.
 
-Additionally, the `Component` file should be known in the "parent component", or globally 
-registered within the "application".
+Additionally, the `Component` file should be registered to a "parent component", or globally 
+to the Muban "application".
 
-In the parent component this can be done by using `refComponent` for the refs, or otherwise 
+In the parent component this can be done by using `refComponent` for the refs, or 
 using the `components` array. More on this later.
 :::
 
 ## Rendering the App
 
-Now that we have our first components (a template and logic file), it's time to render it by mounting our Application.
+Now that we have our first component (a template and logic file), it's time to render it by mounting our Application.
 
 In the `main.ts` (that was created by Vite), change the code to this:
 
@@ -101,14 +101,14 @@ In the `main.ts` (that was created by Vite), change the code to this:
 
 It does the following things:
 
-1. Import `createApp`, to, well, create our Application.
+1. Import `createApp`, for creating our Muban Application.
 2. Import our component and template files.
-3. Query the root element of our application
+3. Query the root element of our application.
 4. Call `createApp` by passing our `App` component, which returns the `app` instance.
 5. `mount` our application in the `appRoot`, passing the `appTemplate` to render the HTML, passing the `title` prop
    to pass to the template.
 
-If we check the browser, we should see a `Todos` title, and `App Running..` in the devtools console.
+If we check the browser, we should see a `Todos` title, and `App Running...` in the devtools console.
 
 ::: tip Development mode
 Calling `mount` with a template + data is normally something we only do in development, or abusing muban to create

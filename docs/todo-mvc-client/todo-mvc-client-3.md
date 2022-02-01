@@ -54,7 +54,7 @@ Next up are the props;
 </CodeGroup>
 
 Instead of (only) receiving props from our parent components, in most cases we extract props from the HTML. Here
-want to extract the `title` of the do, and if it's `isCompleted` or not.
+want to extract the `title` and `isCompleted` props.
 
 Same as with refs, the keys of the `props` object is what we will use in the `setup` function, and the value is the
 "prop definition". Here we use the `propType` helper to define what we want to extract, where from, if it has a
@@ -66,13 +66,13 @@ default value, what type it should be converted to, etc.
 We want to extract the `title` prop from the `title` ref, so we specify that as `target` – the element (ref) we want
 to extract it from. Since we want the inner text of the `<label>`, we use the `text` type.
 
-For the `isComleted`, we want know if the `completed` class was set on the component root element. Since it's the
+For the `isCompleted`, we want know if the `completed` class was set on the component root element. Since it's the
 root, we don't have to specify a `target`. The `type` is set to `css` since we want to check the css class name, and
 `name` is `completed`, because we want to check for that value. If it's present, the result will be `true` –
 otherwise it's `false`.
 
 Just as with the refs, we expect these values to always be there. Otherwise we could have configured the props as
-`.optional` – where they become undefined when not present – or `.defaultValue('foo') to receive that value when
+`.optional` – where they become undefined when not present – or `.defaultValue('foo')` to receive that value when
 missing.
 
 ### Setup
@@ -152,7 +152,7 @@ We are also focussing the edit input – but with a small delay to give the DOM 
 Note that to let typescript understand we can do `element?.focus()` we have now typed our input ref as
 `editInput: refElement<HTMLInputElement>('editInput'),`.
 
-And we created an `editValue` ref, initialising it the extracted value from the `props`, and use that for the `textInput`
+And we created an `editValue` ref, initialising it to the extracted value from the `props`, and use that for the `textInput`
 binding on your `refs.editInput` – which set the initial value correctly, but will also change the `ref` when updating
 the input.
 
@@ -305,7 +305,7 @@ In order to use this extracted data to render our Todo items (and later add or r
 4. Whenever `todos` changes, our 3rd parameter – a template function – is executed. We use it to render our
    `todoItemTemplate` with the passed data, and return the mapped result. This will then replace the `innerHTML` of
    the `<ul>` container we bind to.
-5. `bindTemplate` will also make sure that whenever the HTML is update, it initializes all new components.
+5. `bindTemplate` will also make sure that whenever the HTML is updated, it initializes all new components.
 
 In total, our code should now look like this;
 
@@ -426,16 +426,16 @@ For each item in the collection it executes the callback function, where we rece
 component, and the index in the list.
 
 Whenever `onChange` is called, we map over our todo list, and update the changed item based on index. The newly
-mapped array is assigned back to `todos.value`, which will make sure that whenever the `bindTemplate` is updating
-later, it passes the update values to each item.
+mapped array is assigned back to `todos.value`, which will make sure that whenever the `bindTemplate` is updated
+later, it passes the updated values to each item.
 
 With this in place, if we check our app again, we should be able to edit existing and add new todo items, without
 anything getting reverted to outdated information.
 
 ## Deleting a Todo
 
-Now that we can Add and Edit items, it's time for Deleting ones as well. For this to work, we need to add click
-bindings to our delete button, and add a `onDelete` prop we can call. Then our `App` we need to pass the `onDelete`,
+Now that we can Add and Edit todos, it should also be possible for us to Delete them. For this to work, we need to add click
+bindings to our delete button, and add a `onDelete` prop we can call. Then in our `App` we need to pass the `onDelete`,
 and remove our Todo from the list.
 
 In our `TodoItem` we add our `onDelete` prop:
@@ -502,7 +502,7 @@ We can now add all our refs to the component, including the `remainingCount`, so
 
 And our props, including the `remainingCount` we will receive from the parent component.
 We are not going to try to extract it from the HTML, but instead set it to `0` as default, since 
-everything will client-rendered (and we only receive this information from the parent).
+everything is client-rendered (and we only receive this information from the parent).
 
 <CodeGroup>
 <CodeGroupItem title="src/components/app-footer/AppFooter.ts">

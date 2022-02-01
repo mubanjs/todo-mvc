@@ -6,7 +6,7 @@ The CSS can be found [here](https://github.com/mubanjs/todo-mvc/blob/main/projec
 and it can be copied over into your `src/style.css` file.
 
 The HTML can be cut into 4 different templates:
-1. An individual `TodoItem`
+1. An individual `TodoItem`.
 2. The `AppHeader` section, with an input for new todos.
 3. The `AppFooter` sections, which shows some information, and allows you to filter todos by state.
 4. The `App` component itself, which is responsible for rendering the `TodoItem` components, and connect with the
@@ -24,8 +24,8 @@ Create a `src/components/todo-item/TodoItem.template.ts` with the following cont
 </CodeGroupItem>
 </CodeGroup>
 
-This template has two properties, the `title`, and `isCompleted`  to indicate it's done. From a "data" point of view,
-this is all we know about the item. This is all the information we are going to save into `LocalStorage` later.
+This template has two properties: `title`, the title of each todo, and `isCompleted`, an indicator for when an item has been completed.
+Data wise, this is all we know about the item, and what we are later going to save into `LocalStorage`.
 
 > It does have an `editing` state, but that is all handled by the Component if users interact with it. The "initial
 state" can never be "editing".
@@ -49,7 +49,7 @@ after interacting with the application later.
 > Anything that doesn't have a `data-ref` attribute will stay as rendered.
 
 The two properties that we passed to the template (`{ title, isCompleted }`) are not automatically available in JS
-when we create our Component. We might not even always need them. in this case we do, so we need to think about how
+when we create our Component. We might not even always need them. In this case we do, so we need to think about how
 the Component is going to get access to them later.
 
 For the `title`, we can easily read the `textContent` of the `<label>` tag, so as long as that element has a
@@ -69,7 +69,7 @@ Create a `src/components/app-header/AppHeader.template.ts` with the following co
 </CodeGroupItem>
 </CodeGroup>
 
-This template is similar to what we had before in the `App` template (the `title`). It also has a input to enter new
+This template is similar to what we had before in the `App` template (the `title`). It also has an input for adding new
 todos.
 
 What we have done here is;
@@ -125,7 +125,7 @@ Update our `src/components/app/App.template.ts` to the following;
 </CodeGroup>
 
 This is where everything comes together. Keep in mind that we're still just rendering templates, the "initial state"
-or our application, that is normally rendered on the server.
+of our application, that is normally rendered on the server.
 
 From the `main.ts` (that renders our component when mounting) we expect to receive the title, and a list of todo
 items (that are known on the server). We re-use the `TodoItemTemplateProps` type here to specify which fields each

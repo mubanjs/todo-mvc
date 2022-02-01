@@ -7,4 +7,4 @@ app is implemented in different frameworks. In this case, we have implemented it
 If you are curious to see it in action, visit
 [https://mubanjs.github.io/todo-mvc/projects/todo-mvc-client/](https://mubanjs.github.io/todo-mvc/projects/todo-mvc-client/).
 
-If you want to learn from it, then visit our [extensive tutorial](./todo-mvc-client.html).
+If you want to learn from it, then visit our [extensive tutorial](./todo-mvc-client/).
